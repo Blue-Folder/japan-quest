@@ -1,5 +1,7 @@
 # Japan 👹
 
+Appka: https://blue-folder.github.io/japan-quest/
+
 Náš plán cesty po Japonsku jako appka do telefonu: 3D mapa, timeline každého dne, města po čtvrtích,
 srdíčka a wishlist.
 
