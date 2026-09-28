@@ -1,0 +1,17 @@
+{
+  "name": "Japan 👹",
+  "short_name": "Japan",
+  "description": "Náš plán cesty po Japonsku 23. 10. – 4. 11. 2026",
+  "lang": "cs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d1929",
+  "theme_color": "#0d1929",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
