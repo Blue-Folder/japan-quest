@@ -455,10 +455,10 @@ const REG = {
   kyoto:{name:'Kjóto', c:'#ff6a4d'}, osaka:{name:'Ósaka', c:'#f5b642'}, kafka:{name:'Kafka', c:'#c7a0ff'}
 };
 const P = {
-  hnd:[139.73,35.56], tyo:[139.79,35.71], take:[139.765,35.645],
-  oshima:[139.357,34.752], okada:[139.39,34.79], mihara:[139.40,34.725], sabaku:[139.43,34.735],
-  atami:[139.075,35.1], nagoya:[136.88,35.17], nakatsu:[137.50,35.49], fukushima:[137.69,35.84],
-  narai:[137.81,35.97], torii:[137.80,35.948], yabuhara:[137.79,35.925], miyanokoshi:[137.735,35.885],
+  hnd:[139.73,35.56], tyo:[139.79,35.71], shinjuku:[139.70,35.69],
+  otsuki:[138.94,35.61], fujiyoshida:[138.80,35.49], kofu:[138.57,35.67], kobuchi:[138.32,35.86],
+  suwa:[138.11,36.04], shiojiri:[137.95,36.11], nagoya:[136.88,35.17], nakatsu:[137.50,35.49], fukushima:[137.69,35.84],
+  narai:[137.81,35.97], miyanokoshi:[137.735,35.885],
   nagiso:[137.615,35.60], tsumago:[137.598,35.577], magomepass:[137.585,35.553], magome:[137.567,35.528],
   kyoto:[135.76,35.0], kurama:[135.77,35.117], ichijo:[135.735,35.025], uzumasa:[135.71,35.017],
   fushimi:[135.772,34.967], daitoku:[135.745,35.044], demachi:[135.77,35.03],
@@ -469,19 +469,17 @@ const LEGS = {
   fly_in:{mode:'flight', frame:false, pts:[[124,40.5],'hnd']},
   hnd_tyo:{mode:'train', pts:['hnd','tyo']},
   tokyo_walk:{mode:'city', pts:['tyo',[139.77,35.726],[139.80,35.68],[139.70,35.66],[139.668,35.662],[139.65,35.705],'tyo']},
-  ferry_in:{mode:'ferry', pts:['take',[139.80,35.5],[139.76,35.25],[139.73,35.02],[139.55,34.86],'okada']},
-  oshima_hike:{mode:'trek', pts:['oshima','mihara','sabaku',[139.41,34.75],'oshima']},
-  ferry_atami:{mode:'ferry', pts:['oshima',[139.28,34.85],[139.17,34.98],[139.11,35.08]]},
-  shinkansen_west:{mode:'train', pts:['atami',[138.6,35.12],[138.38,34.98],[137.73,34.72],[137.38,34.77],'nagoya']},
-  nagoya_kiso:{mode:'train', pts:['nagoya',[137.2,35.4],'nakatsu','nagiso','fukushima','miyanokoshi','narai']},
-  trek1:{mode:'trek', pts:['narai','torii','yabuhara',[137.76,35.905],'miyanokoshi']},
-  train_back:{mode:'train', pts:['miyanokoshi',[137.775,35.905],'narai'], hidden:true},
+  tokyo_walk2:{mode:'city', pts:['tyo',[139.699,35.676],[139.7055,35.6665],[139.717,35.662],[139.699,35.649],[139.701,35.658],[139.704,35.694],'tyo']},
+  tokyo_walk3:{mode:'city', pts:['tyo',[139.7925,35.7015],[139.7878,35.7125],[139.8107,35.7101],[139.73,35.664],'tyo']},
+  tyo_fuji:{mode:'train', pts:['tyo','shinjuku',[139.34,35.66],'otsuki','fujiyoshida']},
+  fuji_kiso:{mode:'train', pts:['fujiyoshida','otsuki','kofu','kobuchi','suwa','shiojiri','narai']},
   narai_nagiso:{mode:'train', pts:['narai','miyanokoshi','fukushima','nagiso']},
   trek2:{mode:'trek', pts:['nagiso','tsumago','magomepass','magome']},
   to_kyoto:{mode:'train', pts:['magome','nakatsu',[137.2,35.4],'nagoya',[136.55,35.36],[136.25,35.27],[136.0,35.05],'kyoto']},
   kyoto_day:{mode:'city', pts:['kyoto','kurama','ichijo','uzumasa','kyoto']},
   kyoto_day2:{mode:'city', pts:['kyoto','fushimi','daitoku','demachi','kyoto']},
   kyoto_nara_osaka:{mode:'train', pts:['kyoto',[135.80,34.84],'nara',[135.66,34.69],'osaka']},
+  osaka_day:{mode:'city', pts:['osaka',[135.5068,34.6658],[135.494,34.672],[135.4905,34.7055],[135.506,34.707],[135.512,34.703],'osaka']},
   kafka:{mode:'day', pts:['osaka',[135.2,34.72],[134.7,34.83],'okayama','kojima','sakaide','takamatsu'], roundtrip:true},
   to_kix:{mode:'train', pts:['osaka',[135.4,34.56],'kix']},
   fly_out:{mode:'flight', frame:false, pts:['kix',[122,39]]}
@@ -489,85 +487,83 @@ const LEGS = {
 const LABELS = [
   {k:'tyo', jp:'東京', cz:'Tokio', day:0, base:true},
   {k:'hnd', jp:'羽田', cz:'Haneda', minor:true},
-  {k:'oshima', jp:'伊豆大島', cz:'Izu Ōshima', day:2, base:true},
-  {k:'mihara', jp:'三原山', cz:'Mihara 758 m', minor:true},
-  {k:'atami', jp:'熱海', cz:'Atami', minor:true},
   {k:'fuji', jp:'富士山', cz:'Fudži', minor:true, lift:3.0},
+  {k:'fujiyoshida', jp:'富士吉田', cz:'Chūreitō', minor:true, near:true},
+  {k:'shiojiri', jp:'塩尻', cz:'Shiojiri', minor:true},
   {k:'nagoya', jp:'名古屋', cz:'Nagoja', minor:true},
   {k:'narai', jp:'奈良井宿', cz:'Narai', day:4, base:true},
-  {k:'torii', jp:'鳥居峠', cz:'Torii-tōge', minor:true, near:true},
-  {k:'tsumago', jp:'妻籠', cz:'Tsumago', day:6, base:true},
+  {k:'tsumago', jp:'妻籠', cz:'Tsumago', day:5, base:true},
   {k:'magome', jp:'馬籠', cz:'Magome', minor:true, near:true},
-  {k:'kyoto', jp:'京都', cz:'Kjóto', day:7, base:true},
+  {k:'kyoto', jp:'京都', cz:'Kjóto', day:6, base:true},
   {k:'uzumasa', jp:'太秦', cz:'Yōkai průvod', minor:true, near:true},
   {k:'kurama', jp:'鞍馬', cz:'Kurama', minor:true, near:true},
-  {k:'nara', jp:'奈良', cz:'Nara', minor:true},
-  {k:'osaka', jp:'大阪', cz:'Ósaka', day:10, base:true},
+  {k:'nara', jp:'奈良', cz:'Nara?', minor:true},
+  {k:'osaka', jp:'大阪', cz:'Ósaka', day:9, base:true},
   {k:'sakaide', jp:'坂出', cz:'Sakaide', minor:true},
   {k:'takamatsu', jp:'高松', cz:'Takamatsu', day:11, base:true},
   {k:'kix', jp:'関西空港', cz:'KIX', minor:true}
 ];
 
 const DAYS = [
-{d:'23. 10.', dow:'pá', reg:'tokyo', title:'Přílet do Tokia', jp:'東京', night:'Noc 1/2 · Tokio', base:'tyo', legs:['fly_in','hnd_tyo'], weather:'Typicky 15–21 °C, tma kolem 17:00',
+{d:'23. 10.', dow:'pá', reg:'tokyo', title:'Přílet do Tokia', jp:'東京', night:'Noc 1/4 · Tokio', base:'tyo', legs:['fly_in','hnd_tyo'], weather:'Typicky 15–21 °C, tma kolem 17:00',
  moves:[['flight','Praha → Tokio Haneda (HND)','přílet 16:00'],['train','Haneda → Asakusa / Kuramae','Keikyū jede přímo do linky Toei Asakusa, cca 35 min']],
  plan:['Check-in a sprcha, ať jet lag nevyhraje hned první večer','Večerní procházka Asakusou, když už jsou davy u Sensō-ji pryč','Večeře v izakayách na Hoppy Street, pak brzy spát'],
- tips:['Ubytování: Kuramae nebo Asakusa má přímý vlak z Hanedy i k trajektu (Daimon → Takeshiba). Shibuya je živější, ale dražší a s batohem v davu náročnější.','Suica nebo PASMO si přidejte do telefonu, platí v metru i v konbini.'],
- verify:['Ubytování na 2 noci (Kuramae / Asakusa / Akasaka)','Suica / PASMO v telefonu']},
-{d:'24. 10.', dow:'so', reg:'tokyo', title:'Tokio naplno', jp:'東京', night:'Noc 2/2 · Tokio', base:'tyo', legs:['tokyo_walk'], weather:'Typicky 15–21 °C',
- moves:[['city','Metro a pěšky po čtvrtích','Tokyo Subway Ticket 24 h ~¥800']],
+ tips:['Ubytování: Kuramae nebo Asakusa má přímý vlak z Hanedy a je odtud blízko do Shinjuku na vlak k Fudži. Shibuya je živější, ale dražší a s batohem v davu náročnější.','Suica nebo PASMO si přidejte do telefonu, platí v metru i v konbini.'],
+ verify:['Ubytování v Tokiu na 4 noci (Kuramae / Asakusa)','Suica / PASMO v telefonu']},
+{d:'24. 10.', dow:'so', reg:'tokyo', title:'Tokio naplno', jp:'東京', night:'Noc 2/4 · Tokio', base:'tyo', legs:['tokyo_walk'], weather:'Typicky 15–21 °C',
+ moves:[['city','Metro a pěšky po čtvrtích','Tokyo Subway Ticket 72 h ~¥1 500 vystačí na tři dny']],
  plan:['Ráno Yanaka: dřevěná zástavba, Yanaka Ginza, hřbitov s kočkami','Kiyosumi-Shirakawa: kavárny a Museum of Contemporary Art Tokyo','Odpoledne Shimokitazawa: second-handy, Bonus Track, malé galerie','Večer Kōenji (bary, živá hudba) nebo Nonbei Yokochō v Shibuyi'],
- tips:['Je sobota. Do známých míst jděte ráno, odpoledne do čtvrtí mimo centrum.','Design: dílny a papírnictví v Kuramae, 21_21 Design Sight v Roppongi.'],
- verify:['Jetfoil na neděli (Tokai Kisen, Takeshiba → Ōshima)']},
-{d:'25. 10.', dow:'ne', reg:'oshima', title:'Na sopečný ostrov', jp:'伊豆大島', night:'Noc 1/2 · Ōshima', base:'oshima', legs:['ferry_in'], weather:'Typicky 17–21 °C, větrno, moře ~22 °C',
- moves:[['ferry','Takeshiba → Ōshima (jetfoil Tokai Kisen)','cca 1 h 45 – 2 h, ~¥9 800–10 800 / os.']],
- plan:['Připlutí do Motomachi nebo Okady, přístav se určuje ráno podle vln','Vyzvednout auto nebo skútr: autobusy jezdí řídce, východ ostrova vůbec','Chisō Setsudanmen: sopečné vrstvy v řezu silnice, místní mu říkají baumkuchen','Západ slunce ve venkovním onsenu Hama-no-yu (v plavkách)'],
- tips:['Spěte v minshuku v Motomachi nebo v rybářském Habu, které je autentičtější.','Na auto potřebujete mezinárodní řidičák podle úmluvy z roku 1949.','Ochutnejte bekko-zushi: marinovanou rybu s chilli, místní specialitu.'],
- verify:['Časy jetfoilu 25. 10. a přístav připlutí','Půjčení auta / skútru','Minshuku na 2 noci']},
-{d:'26. 10.', dow:'po', reg:'oshima', title:'Kráter Mihara', jp:'三原山', night:'Noc 2/2 · Ōshima', base:'oshima', legs:['oshima_hike'], weather:'Typicky 17–21 °C, na kráteru silný vítr',
- moves:[['trek','Okruh kolem kráteru a Ura-sabaku','cca 10–14 km']],
- plan:['Z vyhlídky Sanchō-guchi na okraj kráteru (758 m) a kolem dokola','Ura-sabaku: černá sopečná pláň, jediné místo, které japonské mapy označují jako poušť','Odpoledne koupání nebo šnorchl v zátoce Tōshiki','Večer přístav Habu, ryby a sake'],
- tips:['Vezměte větrovku, na kráteru nic neroste a fouká.','Při velkých vlnách se lodě ruší. Na zítřek mějte i variantu přes Tokio.'],
- verify:['Předpověď moře na 27. 10.']},
-{d:'27. 10.', dow:'út', reg:'kiso', title:'Z moře do hor', jp:'奈良井宿', night:'Noc 1/3 · Narai', base:'narai', legs:['ferry_atami','shinkansen_west','nagoya_kiso'], weather:'Kiso: přes den 12–16 °C, v noci 3–6 °C',
- moves:[['ferry','Ōshima → Atami (jetfoil)','cca 45–60 min, ~1× denně, ~¥6 500'],['train','Atami → Nagoja (Tōkaidō šinkansen)','cca 1 h 10'],['train','Nagoja → Kiso-Fukushima (Shinano) → Narai','cca 1 h 30 + 20 min lokálkou']],
- plan:['Přesunový den, celkem zhruba 5–6 hodin','Večer se projděte po prázdné hlavní ulici Narai, kilometr dřevěných domů','Večeře v minshuku: horská kuchyně, soba, gohei-mochi'],
- tips:['Plán B, když loď do Atami nejede: ranní loď do Tokia, šinkansen Tokio → Nagoja (1 h 40) a dál stejně.','V Narai spěte 2 noci. Zítra jdete nalehko a batohy zůstanou na pokoji.'],
- verify:['Jede jetfoil Ōshima → Atami 27. 10. a v kolik?','Minshuku / ryokan v Narai na 2 noci']},
-{d:'28. 10.', dow:'st', reg:'kiso', title:'Trek I: průsmyk Torii', jp:'鳥居峠', night:'Noc 2/3 · Narai', base:'narai', legs:['trek1','train_back'], weather:'Typicky 10–15 °C, začíná barvení listí',
- moves:[['trek','Narai → Torii-tōge (1 197 m) → Yabuhara → Miyanokoshi','cca 15 km, ~350 m stoupání'],['train','Miyanokoshi → Narai lokálkou','cca 15 min']],
- plan:['Ráno po staré kamenné dlažbě Nakasendó do průsmyku Torii','Oběd v Yabuhaře, vesnici ručně dělaných hřebenů oroku-gushi','Dál podél řeky Kiso do Miyanokoshi, zpátky vlakem','Večer onsen a druhá noc ve stejné posteli'],
- tips:['V lesích žijí medvědi. Na trase visí zvony, zazvoňte na ně; zvoneček na batoh se hodí.','Mějte hotovost, malé obchody a minshuku často neberou karty.'],
- verify:['Stav stezky přes Torii-tōge (uzavírky)']},
-{d:'29. 10.', dow:'čt', reg:'kiso', title:'Trek II: Tsumago → Magome', jp:'妻籠 · 馬籠', night:'Noc 3/3 · Tsumago / Magome', base:'tsumago', legs:['narai_nagiso','trek2'], weather:'Typicky 12–16 °C',
+ tips:['Je sobota. Do známých míst jděte ráno, odpoledne do čtvrtí mimo centrum.','Design: dílny a papírnictví v Kuramae necháme na pondělí.'],
+ verify:['Tokyo Subway Ticket 72 h']},
+{d:'25. 10.', dow:'ne', reg:'tokyo', title:'Zahrady, design a neony', jp:'原宿 · 新宿', night:'Noc 3/4 · Tokio', base:'tyo', legs:['tokyo_walk2'], weather:'Typicky 15–21 °C',
+ moves:[['city','Metro a pěšky: Harajuku → Omotesandō → Shibuya → Shinjuku','Tokyo Subway Ticket']],
+ plan:['Ráno Meiji Jingū, les uprostřed města, než přijdou davy','Ura-Harajuku a Cat Street: nezávislé obchody','Nezu Museum: asijské umění a zahrada, budova Kengo Kumy','Odpoledne Daikanyama T-Site a západ slunce ze Shibuya Sky','Večer Shinjuku: Omoide Yokochō a Golden Gai'],
+ tips:['V neděli bývají na Omotesandō davy. Boční uličky Ura-Harajuku jsou klidnější.','Shibuya Sky: vstupenky na západ slunce se vyprodávají, kupte je pár dní předem.','Nezu Museum má v pondělí zavřeno, proto je dnes.'],
+ verify:['Shibuya Sky na západ slunce (~17:00)','Nezu Museum: rezervace časového vstupu']},
+{d:'26. 10.', dow:'po', reg:'tokyo', title:'Řemesla a umění', jp:'蔵前 · 六本木', night:'Noc 4/4 · Tokio', base:'tyo', legs:['tokyo_walk3'], weather:'Typicky 15–20 °C',
+ moves:[['city','Kuramae → Kappabashi → Sumida → Roppongi','Metro a pěšky']],
+ plan:['Ráno Kuramae: Kakimori (zápisník na míru), dílny a kavárny','Kappabashi: ulice kuchyňských nožů a plastového jídla','Po nábřeží Sumida ke Skytree','Odpoledne Roppongi: 21_21 Design Sight a Mori Art Museum (do 22:00)','Večer sbalit: zítra se jede brzo ráno'],
+ tips:['V pondělí má většina tokijských muzeí zavřeno, 21_21 a Mori Art Museum ne.','Velké batohy pošlete dnes přes hotel rovnou do Kjóta (Yamato takkyūbin, ~¥2 000–3 000 / kus, dorazí za 1–2 dny). K Fudži a na trek pak jdete jen s malým batohem.'],
+ verify:['Takkyūbin z hotelu do Kjóta (adresa kjótského ubytování)']},
+{d:'27. 10.', dow:'út', reg:'kiso', title:'Přes Fudži do hor', jp:'富士山 · 奈良井宿', night:'Noc 1/2 · Narai', base:'narai', legs:['tyo_fuji','fuji_kiso'], weather:'U Fudži ráno 8–15 °C, Kiso v noci 3–6 °C',
+ moves:[['train','Shinjuku → Ōtsuki (JR Chūō, Kaiji / Azusa)','cca 1 h'],['train','Ōtsuki → Shimoyoshida (Fujikyū)','cca 45–50 min'],['train','Shimoyoshida → Ōtsuki → Shiojiri (Azusa)','cca 50 min + 2 h'],['train','Shiojiri → Narai (JR Chūō, lokálka)','cca 25 min']],
+ plan:['Brzy ráno vlakem k Fudži, dopoledne je hora nejčastěji bez mraků','Pagoda Chūreitō v parku Arakurayama Sengen: 398 schodů a nejslavnější pohled na Fudži s pagodou','Ulice Honchō ve Fujiyoshidě: retro obchody a Fudži na konci ulice, oběd yoshida udon','Odpoledne vlakem přes Kōfu a Suwu do Kiso, výhledy na Japonské Alpy','Večer Narai: prázdná hlavní ulice, kilometr dřevěných domů, večeře v minshuku'],
+ tips:['Fudži se často schová do mraků kolem poledne. Pokud je ráno zataženo, jeďte rovnou Shinjuku → Shiojiri (Azusa, cca 2 h 40) a Fudži zkuste z okna vlaku.','Fuji Excursion jede ze Shinjuku bez přestupu, ověřte, jestli staví v Shimoyoshidě.','Na stanici Ōtsuki jsou skříňky na zavazadla, jestli batohy neposíláte napřed.','Na JR úseky vyjde levněji jednosměrná jízdenka Shinjuku → Narai s přerušením cesty v Ōtsuki.'],
+ verify:['Předpověď oblačnosti u Fudži na 27. 10.','Časy vlaků Fujikyū a Azusa','Minshuku / ryokan v Narai na 1 noc']},
+{d:'28. 10.', dow:'st', reg:'kiso', title:'Trek Tsumago → Magome', jp:'妻籠 · 馬籠', night:'Noc 2/2 · Tsumago / Magome', base:'tsumago', legs:['narai_nagiso','trek2'], weather:'Typicky 12–16 °C, začíná barvení listí',
  moves:[['train','Narai → Nagiso (JR Chūō)','cca 1 h, případně přestup v Kiso-Fukushimě'],['trek','Nagiso → Tsumago → průsmyk Magome → Magome','cca 12 km']],
- plan:['Z Nagisa pěšky do Tsumaga, nejzachovalejší poštovní stanice','Přes průsmyk Magome (801 m), vodopády Odaki a Medaki, čajovna v lese','Noc v minshuku v Tsumagu nebo Magome, s večeří'],
- tips:['Tsumago a Magome si posílají zavazadla přes turistická centra (sezónně, odevzdat do ~11:30, ~¥1 000 / kus).','Nebo pošlete velké batohy z Narai rovnou do Kjóta přes Yamato takkyūbin a jděte jen s denním batohem.'],
- verify:['Přeposílání zavazadel Tsumago ↔ Magome 29. 10.','Rezervace minshuku (mají málo pokojů)']},
-{d:'30. 10.', dow:'pá', reg:'kyoto', title:'Do Kjóta', jp:'京都', night:'Noc 1/3 · Kjóto', base:'kyoto', legs:['to_kyoto'], weather:'Typicky 13–20 °C',
+ plan:['Ráno ještě krátká procházka po Narai, pak vlakem do Nagisa','Z Nagisa pěšky do Tsumaga, nejzachovalejší poštovní stanice','Přes průsmyk Magome (801 m), vodopády Odaki a Medaki, čajovna v lese','Noc v minshuku v Tsumagu nebo Magome, s večeří'],
+ tips:['Tsumago a Magome si posílají zavazadla přes turistická centra (sezónně, odevzdat do ~11:30, ~¥1 000 / kus).','V lesích žijí medvědi. Na trase visí zvony, zazvoňte na ně; zvoneček na batoh se hodí.','Mějte hotovost, malé obchody a minshuku často neberou karty.'],
+ verify:['Přeposílání zavazadel Tsumago ↔ Magome 28. 10.','Rezervace minshuku (mají málo pokojů)']},
+{d:'29. 10.', dow:'čt', reg:'kyoto', title:'Do Kjóta', jp:'京都', night:'Noc 1/3 · Kjóto', base:'kyoto', legs:['to_kyoto'], weather:'Typicky 13–20 °C',
  moves:[['train','Magome → Nakatsugawa (bus) → Nagoja (Shinano) → Kjóto (šinkansen)','cca 2 h 30 – 3 h']],
  plan:['Odpoledne check-in, pak procházka podél řeky Kamo','Večeře v uličkách kolem Pontochō nebo v klidnějším Demachi','Gion po setmění, když odjedou autobusy'],
  tips:['Bydlení: Shijō-Karasuma nebo Gojō (metro, pěšky všude), případně machiya guesthouse.','Javory v Kjótu se barví až ve druhé půlce listopadu. Podzimní barvy uvidíte hlavně v Kiso.'],
- verify:['Ubytování v Kjótu na 3 noci']},
-{d:'31. 10.', dow:'so', reg:'kyoto', title:'Den yōkai', jp:'妖怪', night:'Noc 2/3 · Kjóto', base:'kyoto', legs:['kyoto_day'], weather:'Typicky 12–19 °C',
- moves:[['city','Kurama → Ichijō Yōkai Street → Uzumasa','místní vláčky Eizan a Randen']],
- plan:['Ráno Kurama: chrám a les z legend o tenguech, přechod do Kibune (~2 h)','Ichijō Yōkai Street: obchody s yōkai figurkami před vchodem','Toei Uzumasa Studio Village: průvod Hyakki Yakō ve 14:30 nebo 16:00','Halloweenský večer s noční vstupenkou od 17:00'],
- tips:['Průvod jde o víkendech a svátcích 12. 9. – 29. 11. v 10:30, 14:30 a 16:00, takže vám vychází 31. 10. i 1. 11.','Vstupné: celodenní ¥3 800, noční od 17:00 ¥3 000.'],
- verify:['Oficiální program festivalu na 31. 10. a 1. 11.','Vstupenky: celodenní, nebo noční?']},
-{d:'1. 11.', dow:'ne', reg:'kyoto', title:'Kjóto bez davů', jp:'京都', night:'Noc 3/3 · Kjóto', base:'kyoto', legs:['kyoto_day2'], weather:'Typicky 12–19 °C',
+ verify:['Ubytování v Kjótu na 3 noci (29.–31. 10.)']},
+{d:'30. 10.', dow:'pá', reg:'kyoto', title:'Kjóto bez davů', jp:'京都', night:'Noc 2/3 · Kjóto', base:'kyoto', legs:['kyoto_day2'], weather:'Typicky 12–19 °C',
  moves:[['city','Kolo, autobus a pěšky','půjčení kola ~¥1 000 / den']],
  plan:['V 7:00 Fushimi Inari, horní okruh bývá skoro prázdný','Daitoku-ji: zenové zahrady v menších chrámech, bez zájezdů','Pasáž Demachi Masugata a kavárny okolo','Večer ramen na Ichijōji Ramen Street'],
- tips:['Když včera nevyšel průvod, dnes jde znovu.','Filozofická stezka je hezčí ráno než odpoledne.'],
+ tips:['Yōkai průvod jde jen o víkendech, proto je až zítra.','Filozofická stezka je hezčí ráno než odpoledne.'],
  verify:[]},
-{d:'2. 11.', dow:'po', reg:'osaka', title:'Přes Naru do Ósaky', jp:'奈良 → 大阪', night:'Noc 1/2 · Ósaka', base:'osaka', legs:['kyoto_nara_osaka'], weather:'Typicky 13–20 °C',
+{d:'31. 10.', dow:'so', reg:'kyoto', title:'Den yōkai', jp:'妖怪', night:'Noc 3/3 · Kjóto', base:'kyoto', legs:['kyoto_day'], weather:'Typicky 12–19 °C',
+ moves:[['city','Kurama → Ichijō Yōkai Street → Uzumasa','místní vláčky Eizan a Randen']],
+ plan:['Ráno Kurama: chrám a les z legend o tenguech, přechod do Kibune (~2 h)','Ichijō Yōkai Street: obchody s yōkai figurkami před vchodem','Toei Uzumasa Studio Village: průvod Hyakki Yakō ve 14:30 nebo 16:00','Halloweenský večer s noční vstupenkou od 17:00'],
+ tips:['Průvod jde o víkendech a svátcích 12. 9. – 29. 11. v 10:30, 14:30 a 16:00. Sobota 31. 10. je jediný takový den, kdy jste v Kjótu.','Vstupné: celodenní ¥3 800, noční od 17:00 ¥3 000.'],
+ verify:['Oficiální program festivalu na 31. 10.','Vstupenky: celodenní, nebo noční?']},
+{d:'1. 11.', dow:'ne', reg:'osaka', title:'Nara? A pak Ósaka', jp:'奈良 → 大阪', night:'Noc 1/3 · Ósaka', base:'osaka', legs:['kyoto_nara_osaka'], weather:'Typicky 13–20 °C',
  moves:[['train','Kjóto → Nara (Kintetsu)','cca 35–45 min'],['train','Nara → Ósaka-Namba (Kintetsu)','cca 40 min']],
- plan:['Batohy do schránek na stanici Kintetsu-Nara','Park s jeleny, Tōdai-ji, pak klidné uličky Naramachi','Odpoledne do Namby a check-in','Večer Ura-Namba a Hōzen-ji Yokochō: izakaye, lampiony, socha obrostlá mechem'],
- tips:['Nara leží přímo mezi Kjótem a Ósakou, výlet vás nestojí žádnou cestu navíc.','Bydlete u Namby, odtud jede ráno Nankai rapi:t přímo na KIX.','V pondělí mají některá muzea v Naře zavřeno, Tōdai-ji je otevřené.'],
- verify:['Ubytování v Nambě na 2 noci']},
-{d:'3. 11.', dow:'út', reg:'kafka', title:'Kafka na pobřeží', jp:'高松 · 坂出', night:'Noc 2/2 · Ósaka', base:'osaka', legs:['kafka'], weather:'Typicky 13–20 °C · státní svátek (Den kultury)',
+ plan:['Nara je zatím otazník, rozhodnete se podle energie','Batohy do schránek na stanici Kintetsu-Nara','Park s jeleny, Tōdai-ji, pak klidné uličky Naramachi','Odpoledne do Namby a check-in','Večer Ura-Namba a Hōzen-ji Yokochō: izakaye, lampiony, socha obrostlá mechem'],
+ tips:['Nara leží přímo mezi Kjótem a Ósakou, výlet vás nestojí žádnou cestu navíc.','Bez Nary: dopoledne ještě Kjóto a odpoledne rovnou do Ósaky (JR nebo Keihan, cca 30–50 min).','Je neděle, v parku v Naře bude plno. Přijeďte do 10:00.','Bydlete u Namby, odtud jede ráno Nankai rapi:t přímo na KIX.'],
+ verify:['Rozhodnout: Nara ano, nebo ne?','Ubytování v Nambě na 3 noci']},
+{d:'2. 11.', dow:'po', reg:'osaka', title:'Ósaka po čtvrtích', jp:'大阪', night:'Noc 2/3 · Ósaka', base:'osaka', legs:['osaka_day'], weather:'Typicky 13–20 °C',
+ moves:[['city','Pěšky a metro Midōsuji','Osaka Metro 1denní lístek ~¥820']],
+ plan:['Ráno trh Kuromon, snídaně po kouscích','Sennichimae Dōguyasuji: kuchyňské nože a vybavení','Horie a Amerikamura: design, vintage, kavárny','Odpoledne Nakazakichō: kavárny v předválečných domcích nagaya','Západ slunce z Umeda Sky Building','Večer Tenma: labyrint levných izakají'],
+ tips:['V pondělí mají muzea na Nakanoshimě zavřeno, proto dnes čtvrti a jídlo.','Kuromon je nejlepší do 10:00, pak tam jsou hlavně turisté.'],
+ verify:[]},
+{d:'3. 11.', dow:'út', reg:'kafka', title:'Kafka na pobřeží', jp:'高松 · 坂出', night:'Noc 3/3 · Ósaka', base:'osaka', legs:['kafka'], weather:'Typicky 13–20 °C · státní svátek (Den kultury)',
  moves:[['day','Shin-Ōsaka → Okayama (šinkansen) → Marine Liner přes most Seto Ōhashi','cca 1 h 45 do Sakaide, ~¥7–8 tis. jedním směrem'],['day','Takamatsu → zpět do Ósaky','cca 2 h']],
- plan:['Sakaide: Kamada Kyosaikai Kyōdo Museum, budova spojovaná s Komurovou knihovnou','Takamatsu: sanuki udon k obědu','Odpoledne zahrada Ritsurin','Večer zpátky v Ósace: Shinsekai nebo Tenma'],
- tips:['Je to bonus: zvládne se za den bez stěhování, ale znamená asi 4 hodiny ve vlaku. Rozhodněte se podle energie.','Alternativa: den v Ósace (trh Kuromon ráno, Nakazakichō, Tenma).'],
+ plan:['Sakaide: Kamada Kyosaikai Kyōdo Museum, budova spojovaná s Komurovou knihovnou','Takamatsu: sanuki udon k obědu','Odpoledne zahrada Ritsurin','Večer zpátky v Ósace: Shinsekai'],
+ tips:['Je to bonus: zvládne se za den bez stěhování, ale znamená asi 4 hodiny ve vlaku. Rozhodněte se podle energie.','Alternativa: klidný den v Ósace. Muzea na Nakanoshimě, Shinsekai a výhled z Abeno Harukas.'],
  verify:['Otevírací doba muzea Kamada 3. 11. (svátek)','Časy a ceny JR Okayama → Sakaide → Takamatsu']},
 {d:'4. 11.', dow:'st', reg:'osaka', title:'Sayōnara', jp:'関西空港', night:'Odlet 9:20', base:'kix', legs:['to_kix','fly_out'], weather:'Brzký start',
  moves:[['train','Namba → KIX (Nankai rapi:t)','cca 38 min'],['flight','KIX → Praha','odlet 9:20']],
@@ -591,25 +587,25 @@ const MODE_IC = {
 const TL = [
  [['16:00','✈️','Přílet na Hanedu','Imigrace a zavazadla cca 45 min'],['17:00','🚃','Keikyū → Asakusa','Přímý vlak bez přestupu, cca 35 min'],['18:00','🏨','Check-in','Asakusa / Kuramae'],['19:00','⛩️','Sensō-ji večer','Nasvícený chrám bez davů'],['20:00','🍢','Hoppy Street','Izakaye s posezením venku'],['22:00','😴','Spát','Jet lag si nevybírá']],
  [['08:00','☕','Kayaba Coffee','Snídaně v kavárně z roku 1938, Yanaka'],['09:00','🚶','Yanaka Ginza a hřbitov','Stará Tokio, kočky, malé krámky'],['11:00','🚇','Metro → Kiyosumi-Shirakawa','cca 25 min'],['11:30','🏛️','MOT, Museum of Contemporary Art','A pak ☕ Allpress Roastery'],['13:00','🍜','Oběd','Třeba soba u zahrady Kiyosumi'],['14:30','🚃','Keiō linka → Shimokitazawa',''],['15:00','🛍️','Shimokitazawa','Vintage, Bonus Track, galerie'],['17:30','🍸','Nonbei Yokochō, Shibuya','Mini bary pro 6 lidí'],['19:30','🎸','Kōenji','Bary a živá hudba, konec dne v sentō']],
- [['07:30','🚇','Asakusa → Daimon → Takeshiba','Linka Toei Asakusa, cca 20 min'],['08:30','⛴️','Jetfoil na Ōshimu','Čas ověřit, cca 1 h 45'],['10:30','⚓','Motomachi / Okada','Přístav podle vln'],['11:00','🚗','Auto nebo skútr',''],['12:00','🍣','Bekko-zushi','Místní marinovaná ryba s chilli'],['14:00','📸','Chisō Setsudanmen','Vrstvy sopečného popela v řezu'],['15:30','⚓','Přístav Habu','Rybářská vesnice'],['16:45','♨️','Hama-no-yu','Onsen při západu slunce, s plavkami'],['19:00','🍶','Večeře v minshuku','']],
- [['08:00','🍙','Snídaně',''],['09:00','🚗','Sanchō-guchi','Parkoviště s výhledem na kráter'],['09:30','🥾','Okruh kolem kráteru','Mihara 758 m, cca 2 h'],['11:30','🌋','Ura-sabaku','Černá sopečná poušť'],['13:30','🍱','Oběd',''],['14:30','🤿','Tōshiki','Koupání a šnorchl'],['17:00','♨️','Onsen',''],['19:00','🍶','Večeře v Habu','Ryby a sake']],
- [['09:00','⛴️','Jetfoil → Atami','Čas podle lodi, ověřit'],['10:30','🚄','Šinkansen Atami → Nagoja','cca 1 h 10'],['12:30','🚃','Shinano → Kiso-Fukushima','cca 1 h 30'],['14:30','🚃','Lokálka → Narai','cca 20 min'],['15:00','🏯','Narai-juku','Kilometr dřevěných domů'],['18:30','🍲','Večeře v minshuku','Soba, gohei-mochi']],
- [['07:30','🍙','Snídaně',''],['08:30','🥾','Narai → Torii-tōge','Kamenná stezka, 1 197 m'],['10:30','🏘️','Yabuhara','Dílny na hřebeny oroku-gushi'],['12:00','🍜','Oběd',''],['13:00','🥾','Po staré cestě do Miyanokoshi','Podél řeky Kiso'],['15:30','🚃','Vlak zpět do Narai','cca 15 min'],['17:00','♨️','Koupel',''],['18:30','🍲','Večeře','']],
+ [['08:30','⛩️','Meiji Jingū','Les uprostřed města, ráno bez davů'],['10:00','🛍️','Ura-Harajuku a Cat Street','Nezávislé obchody'],['11:30','🏛️','Nezu Museum','Zahrada a budova Kengo Kumy'],['13:00','🍜','Oběd na Omotesandō',''],['14:30','📚','Daikanyama T-Site','Knihkupectví jako architektura'],['16:30','📸','Shibuya Sky','Západ slunce, vstupenka předem'],['18:00','🚃','JR Yamanote → Shinjuku','cca 7 min'],['18:30','🍢','Omoide Yokochō','Yakitori pod tratí'],['20:30','🍸','Golden Gai','Mini bary, některé jen pro štamgasty']],
+ [['08:30','☕','Dandelion Chocolate Kuramae','Snídaně'],['09:30','🎨','Kakimori','Zápisník svázaný na míru'],['10:30','🛍️','Kappabashi','Nože a plastové jídlo'],['12:00','🍜','Oběd',''],['13:00','🌉','Nábřeží Sumida → Skytree','Procházka podél řeky'],['15:00','🚇','Metro → Roppongi','cca 30 min'],['15:30','🎨','21_21 Design Sight','Budova Tadao Andō'],['17:30','🏛️','Mori Art Museum','Otevřeno do 22:00, výhled na Tokio'],['20:30','🧳','Balení','Zítra vlak kolem 7:00']],
+ [['06:45','🚇','Metro → Shinjuku','cca 30 min'],['07:30','🚃','JR Chūō → Ōtsuki','Kaiji / Azusa, cca 1 h'],['08:45','🚃','Fujikyū → Shimoyoshida','cca 45–50 min'],['09:45','🗻','Pagoda Chūreitō','398 schodů, klasický pohled na Fudži'],['11:15','📸','Ulice Honchō','Fudži na konci ulice'],['12:00','🍜','Yoshida udon','Tvrdé místní nudle'],['13:00','🚃','Fujikyū → Ōtsuki','cca 50 min'],['14:00','🚄','Azusa → Shiojiri','cca 2 h, Japonské Alpy z okna'],['16:15','🚃','Lokálka → Narai','cca 25 min'],['16:45','🏯','Narai-juku','Kilometr dřevěných domů'],['18:30','🍲','Večeře v minshuku','Soba, gohei-mochi']],
  [['08:00','🚃','Narai → Nagiso','cca 1 h'],['09:15','🥾','Nagiso → Tsumago','cca 4 km'],['10:30','🏯','Tsumago-juku',''],['11:30','🧳','Poslat zavazadla do Magome','Turistické centrum, do ~11:30'],['12:00','🍜','Soba v Tsumagu',''],['13:00','🥾','Přes průsmyk do Magome','cca 8 km, čajovna v lese'],['16:30','🏯','Magome-juku',''],['18:00','🍲','Večeře v minshuku','']],
  [['08:30','🚌','Magome → Nakatsugawa','cca 25 min'],['09:30','🚃','Shinano → Nagoja','cca 50 min'],['11:00','🚄','Šinkansen → Kjóto','cca 35 min'],['12:00','🏨','Batohy na hotel',''],['13:00','🍱','Trh Nishiki','Oběd po kouscích'],['15:00','🏛️','Okazaki: muzea nebo Filozofická stezka',''],['17:30','🌉','Řeka Kamo','Procházka k Pontochō'],['18:30','🍢','Pontochō','Večeře v uličce'],['20:30','🏮','Gion Shirakawa','Po setmění, bez davů']],
- [['08:00','🚃','Eizan z Demachiyanagi → Kurama','cca 30 min'],['08:45','⛩️','Kurama-dera','Hora tenguů'],['09:30','🥾','Přechod do Kibune','cca 2 h lesem'],['11:30','⛩️','Kifune-jinja a oběd',''],['13:00','🚃','Zpět → Kitano',''],['13:45','👹','Ichijō Yōkai Street','Yōkai figurky před obchody'],['15:00','⛩️','Kōryū-ji','Socha Mirokua, národní poklad č. 1'],['16:00','👹','Průvod Hyakki Yakō','Toei Uzumasa, celodenní vstupenka'],['17:00','🎃','Halloweenský večer ve studiích',''],['20:00','🍜','Večeře','']],
  [['06:45','🚃','Keihan → Fushimi-Inari',''],['07:00','⛩️','Fushimi Inari','Horní okruh, tisíce bran'],['09:30','🍶','Saké čtvrť Fushimi','Gekkeikan Okura muzeum'],['11:30','🚲','Kolo',''],['12:30','🍡','Demachi Futaba','Mame-mochi, fronta se hýbe'],['13:00','🐢','Delta řeky Kamo','Želví kameny'],['14:00','⛩️','Daitoku-ji','Kōtō-in a Daisen-in'],['16:00','📚','Keibunsha, Ichijōji','Legendární knihkupectví'],['18:00','🍜','Ichijōji Ramen Street','']],
- [['08:30','🚃','Kintetsu → Nara','cca 45 min'],['09:30','🧳','Batohy do schránek','Stanice Kintetsu-Nara'],['10:00','🦌','Park a Tōdai-ji',''],['12:00','🍱','Oběd v Naramachi',''],['13:30','🚶','Uličky Naramachi',''],['15:30','🚃','Kintetsu → Namba','cca 40 min'],['16:30','🏨','Check-in',''],['18:30','🏮','Hōzen-ji Yokochō','Lampiony, socha obrostlá mechem'],['19:30','🍢','Ura-Namba','Izakaye pod tratí']],
- [['07:45','🚄','Shin-Ōsaka → Okayama','cca 45 min'],['08:40','🚃','Marine Liner přes Seto Ōhashi','Výhled na moře z mostu'],['09:30','📚','Muzeum Kamada, Sakaide','Komurova knihovna. Ověřit otevírací dobu'],['11:30','🚃','→ Takamatsu','cca 20 min'],['12:00','🍜','Sanuki udon',''],['13:30','🌳','Zahrada Ritsurin',''],['16:00','🚃','Zpět do Ósaky','cca 2 h'],['18:30','🍢','Shinsekai nebo Tenma','Kushikatsu']],
+ [['08:00','🚃','Eizan z Demachiyanagi → Kurama','cca 30 min'],['08:45','⛩️','Kurama-dera','Hora tenguů'],['09:30','🥾','Přechod do Kibune','cca 2 h lesem'],['11:30','⛩️','Kifune-jinja a oběd',''],['13:00','🚃','Zpět → Kitano',''],['13:45','👹','Ichijō Yōkai Street','Yōkai figurky před obchody'],['15:00','⛩️','Kōryū-ji','Socha Mirokua, národní poklad č. 1'],['16:00','👹','Průvod Hyakki Yakō','Toei Uzumasa, celodenní vstupenka'],['17:00','🎃','Halloweenský večer ve studiích',''],['20:00','🍜','Večeře','']],
+ [['08:30','🚃','Kintetsu → Nara','cca 45 min, pokud jedete'],['09:30','🧳','Batohy do schránek','Stanice Kintetsu-Nara'],['10:00','🦌','Park a Tōdai-ji',''],['12:00','🍱','Oběd v Naramachi',''],['13:30','🚶','Uličky Naramachi',''],['15:30','🚃','Kintetsu → Namba','cca 40 min'],['16:30','🏨','Check-in',''],['18:30','🏮','Hōzen-ji Yokochō','Lampiony, socha obrostlá mechem'],['19:30','🍢','Ura-Namba','Izakaye pod tratí']],
+ [['08:30','🛍️','Trh Kuromon','Snídaně po kouscích'],['10:00','🔪','Sennichimae Dōguyasuji','Nože a kuchyňské vybavení'],['11:00','🛍️','Minami-Horie','Nábytek a design'],['12:30','🍜','Oběd v Amerikamura',''],['14:00','🚇','Metro → Nakazakichō','cca 15 min'],['14:30','☕','Nakazakichō','Kavárny v domcích nagaya'],['16:30','📸','Umeda Sky Building','Floating Garden při západu'],['18:30','🍸','Tenma','Levné izakaye u stanice']],
+ [['07:45','🚄','Shin-Ōsaka → Okayama','cca 45 min'],['08:40','🚃','Marine Liner přes Seto Ōhashi','Výhled na moře z mostu'],['09:30','📚','Muzeum Kamada, Sakaide','Komurova knihovna. Ověřit otevírací dobu'],['11:30','🚃','→ Takamatsu','cca 20 min'],['12:00','🍜','Sanuki udon',''],['13:30','🌳','Zahrada Ritsurin',''],['16:00','🚃','Zpět do Ósaky','cca 2 h'],['18:30','🍢','Shinsekai','Kushikatsu']],
  [['05:45','⏰','Vstávat',''],['06:15','🚃','Nankai rapi:t → KIX','cca 38 min'],['07:00','🧳','Check-in a bezpečnostní kontrola',''],['09:20','✈️','Odlet domů','']]
 ];
 
-const TLREF={"0-0": "q:Haneda Airport", "0-3": "asakusa:0", "0-4": "asakusa:1", "1-0": "yanaka:0", "1-1": "yanaka:1", "1-3": "kiyosumi:0", "1-4": "kiyosumi:1", "1-6": "shimokita:1", "1-7": "shibuya:0", "1-8": "koenji:0", "2-1": "q:Tokai Kisen jetfoil Izu Oshima", "2-2": "q:Motomachi port Izu Oshima", "2-4": "q:bekko sushi Izu Oshima", "2-5": "q:Chiso Setsudanmen Izu Oshima", "2-6": "q:Habu port Izu Oshima", "2-7": "q:Hama no yu onsen Izu Oshima", "3-2": "q:Mount Mihara crater Izu Oshima", "3-3": "q:Ura-sabaku Izu Oshima", "3-5": "q:Toshiki beach Izu Oshima", "4-0": "q:Atami port", "4-4": "q:Narai-juku", "5-1": "q:Torii Pass Nakasendo Narai", "5-2": "q:Yabuhara-juku", "5-4": "q:Nakasendo Miyanokoshi", "6-1": "q:Nakasendo trail Nagiso Tsumago", "6-2": "q:Tsumago-juku", "6-5": "q:Magome pass tea house Nakasendo", "6-6": "q:Magome-juku", "7-4": "pontocho:1", "7-5": "okazaki:3", "7-6": "q:Kamo river Kyoto", "7-7": "pontocho:0", "7-8": "gion:2", "8-1": "kurama:0", "8-2": "kurama:1", "8-3": "kurama:2", "8-5": "kitano:0", "8-6": "uzumasa:1", "8-7": "uzumasa:0", "9-1": "fushimi:0", "9-2": "fushimi:1", "9-4": "demachi:0", "9-5": "demachi:1", "9-6": "kitano:2", "9-7": "ichijoji:1", "9-8": "ichijoji:0", "10-2": "q:Todai-ji Nara deer park", "10-4": "q:Naramachi Nara", "10-7": "namba:0", "10-8": "namba:1", "11-1": "q:Seto Ohashi Bridge", "11-2": "q:Kamada Kyosaikai Kyodo Museum Sakaide", "11-4": "q:Sanuki udon Takamatsu", "11-5": "q:Ritsurin Garden", "11-7": "q:Shinsekai Osaka", "12-1": "q:Nankai rapi:t"};
+const TLREF={"0-0": "q:Haneda Airport", "0-3": "asakusa:0", "0-4": "asakusa:1", "1-0": "yanaka:0", "1-1": "yanaka:1", "1-3": "kiyosumi:0", "1-4": "kiyosumi:1", "1-6": "shimokita:1", "1-7": "shibuya:0", "1-8": "koenji:0", "2-0": "shibuya:1", "2-1": "shibuya:2", "2-2": "shibuya:3", "2-4": "shibuya:5", "2-5": "shibuya:4", "2-7": "shinjuku:1", "2-8": "shinjuku:0", "3-0": "asakusa:4", "3-1": "asakusa:3", "3-2": "asakusa:2", "3-4": "asakusa:5", "3-6": "roppongi:0", "3-7": "roppongi:1", "4-3": "q:Chureito Pagoda Arakurayama Sengen Park", "4-4": "q:Honcho Street Fujiyoshida", "4-5": "q:Yoshida udon Fujiyoshida", "4-9": "q:Narai-juku", "5-1": "q:Nakasendo trail Nagiso Tsumago", "5-2": "q:Tsumago-juku", "5-5": "q:Magome pass tea house Nakasendo", "5-6": "q:Magome-juku", "6-4": "pontocho:1", "6-5": "okazaki:3", "6-6": "q:Kamo river Kyoto", "6-7": "pontocho:0", "6-8": "gion:2", "7-1": "fushimi:0", "7-2": "fushimi:1", "7-4": "demachi:0", "7-5": "demachi:1", "7-6": "kitano:2", "7-7": "ichijoji:1", "7-8": "ichijoji:0", "8-1": "kurama:0", "8-2": "kurama:1", "8-3": "kurama:2", "8-5": "kitano:0", "8-6": "uzumasa:1", "8-7": "uzumasa:0", "9-2": "q:Todai-ji Nara deer park", "9-4": "q:Naramachi Nara", "9-7": "namba:0", "9-8": "namba:1", "10-0": "namba:2", "10-1": "namba:3", "10-2": "horie:0", "10-3": "horie:1", "10-5": "nakazaki:0", "10-6": "nakanoshima:2", "10-7": "tenma:0", "11-1": "q:Seto Ohashi Bridge", "11-2": "q:Kamada Kyosaikai Kyodo Museum Sakaide", "11-4": "q:Sanuki udon Takamatsu", "11-5": "q:Ritsurin Garden", "11-7": "shinsekai:0", "12-1": "q:Nankai rapi:t"};
 /* ---------------- CITY DISTRICTS ---------------- */
-const CITY_OF = {0:'tokyo',1:'tokyo',7:'kyoto',8:'kyoto',9:'kyoto',10:'osaka',11:'osaka'};
+const CITY_OF = {0:'tokyo',1:'tokyo',2:'tokyo',3:'tokyo',6:'kyoto',7:'kyoto',8:'kyoto',9:'osaka',10:'osaka',11:'osaka'};
 const CITIES_D = {
  tokyo:{name:'Tokio', base:[139.795,35.705], baseName:'Ubytování', d:[
-  {id:'asakusa', lab:'l', name:'Asakusa a Kuramae', jp:'浅草・蔵前', ll:[139.795,35.708], days:[0], tags:['základna','řemesla'], blurb:'Staré Tokio u řeky Sumida. Kuramae je tichá čtvrť dílen, papírnictví a kaváren.', spots:[
+  {id:'asakusa', lab:'l', name:'Asakusa a Kuramae', jp:'浅草・蔵前', ll:[139.795,35.708], days:[0,3], tags:['základna','řemesla'], blurb:'Staré Tokio u řeky Sumida. Kuramae je tichá čtvrť dílen, papírnictví a kaváren.', spots:[
    ['⛩️','Sensō-ji','Večer nasvícený a skoro prázdný',[139.7967,35.7148]],['🍢','Hoppy Street','Izakaye se stolky na ulici',[139.7935,35.7128]],['🛍️','Kappabashi','Ulice kuchyňských nožů a plastového jídla',[139.7878,35.7125]],['🎨','Kakimori, Kuramae','Zápisník svázaný na míru, plnicí pera',[139.7925,35.7015]],['☕','Dandelion Chocolate Kuramae','',[139.7942,35.7005]],['🌉','Nábřeží Sumida','Procházka k Tokyo Skytree',[139.7995,35.7075]]]},
   {id:'yanaka', lab:'l', name:'Yanaka a Ueno', jp:'谷中・上野', ll:[139.77,35.72], days:[1], tags:['stará zástavba','muzea'], blurb:'Čtvrť, kterou minula válka i developeři: dřevěné domy, chrámky, kočky. Kousek vedle muzea v parku Ueno.', spots:[
    ['☕','Kayaba Coffee','Kavárna z roku 1938',[139.7695,35.72]],['🛍️','Yanaka Ginza','Krátká nákupní ulice se smaženými croquettes',[139.7662,35.7275]],['🌳','Hřbitov Yanaka','',[139.7705,35.7235]],['🎨','SCAI The Bathhouse','Současné umění v bývalých lázních',[139.7715,35.7192]],['🏛️','Tokyo National Museum','Největší sbírka japonského umění',[139.7765,35.7188]],['🏛️','National Museum of Western Art','Budova od Le Corbusiera, UNESCO',[139.7755,35.7155]]]},
@@ -619,45 +615,45 @@ const CITIES_D = {
    ['🛍️','New York Joe Exchange','Vintage v bývalých lázních',[139.6678,35.6622]],['🌿','Bonus Track','Malé obchody a jídlo na bývalé trati',[139.6638,35.6612]],['🛍️','Reload','Nový komplex s kavárnami',[139.67,35.6603]],['🎸','Live housy','Večer koncerty za pár set jenů',[139.669,35.6632]]]},
   {id:'koenji', lab:'r', name:'Kōenji', jp:'高円寺', ll:[139.649,35.705], days:[1], tags:['bary','punk'], blurb:'Tokijský punk a levné bary. Nejlepší večer, kdy se ulice plní lidmi z celého města.', spots:[
    ['🍸','Uličky pod tratí','Desítky malých barů',[139.6493,35.7052]],['🛍️','Vintage na Look Street','',[139.6502,35.7012]],['♨️','Kosugi-yu','Klasické sentō, přes 90 let staré',[139.6522,35.7075]]]},
-  {id:'shibuya', lab:'t', name:'Shibuya a Harajuku', jp:'渋谷・原宿', ll:[139.702,35.665], days:[1], tags:['street culture','design'], blurb:'Hlavní scéna street kultury. Nejlepší brzy ráno nebo v bočních ulicích.', spots:[
+  {id:'shibuya', lab:'t', name:'Shibuya a Harajuku', jp:'渋谷・原宿', ll:[139.702,35.665], days:[1,2], tags:['street culture','design'], blurb:'Hlavní scéna street kultury. Nejlepší brzy ráno nebo v bočních ulicích.', spots:[
    ['🍸','Nonbei Yokochō','Uličky s mini bary',[139.7022,35.6597]],['⛩️','Meiji Jingū','Ráno v lese uprostřed města',[139.6993,35.6764]],['🛍️','Cat Street a Ura-Harajuku','Nezávislé obchody',[139.7055,35.6665]],['🏛️','Nezu Museum','Asijské umění a zahrada, budova Kengo Kumy',[139.7172,35.6622]],['📸','Shibuya Sky','Vyhlídka, rezervace předem',[139.7012,35.6582]],['📚','Daikanyama T-Site','Knihkupectví jako architektura',[139.6992,35.6492]]]},
-  {id:'roppongi', lab:'r', name:'Roppongi', jp:'六本木', ll:[139.731,35.664], days:[], tags:['muzea','design'], blurb:'Trojúhelník velkých muzeí umění.', spots:[
+  {id:'roppongi', lab:'r', name:'Roppongi', jp:'六本木', ll:[139.731,35.664], days:[3], tags:['muzea','design'], blurb:'Trojúhelník velkých muzeí umění.', spots:[
    ['🎨','21_21 Design Sight','Výstavy designu, budova Tadao Andō',[139.7315,35.6662]],['🏛️','Mori Art Museum','Otevřeno do večera',[139.729,35.6605]],['🏛️','National Art Center','Budova Kishō Kurokawy',[139.7262,35.6652]]]},
-  {id:'shinjuku', lab:'r', name:'Shinjuku', jp:'新宿', ll:[139.703,35.694], days:[], tags:['noční život'], blurb:'Neony, uličky barů a velká zahrada.', spots:[
+  {id:'shinjuku', lab:'r', name:'Shinjuku', jp:'新宿', ll:[139.703,35.694], days:[2], tags:['noční život'], blurb:'Neony, uličky barů a velká zahrada.', spots:[
    ['🍸','Golden Gai','Stovky mini barů, některé berou jen štamgasty',[139.7045,35.694]],['🍢','Omoide Yokochō','Yakitori pod tratí',[139.6995,35.6932]],['🌳','Shinjuku Gyoen','Zahrada, vstupné ¥500',[139.71,35.6852]]]}
  ]},
  kyoto:{name:'Kjóto', base:[135.765,35.0], baseName:'Ubytování', d:[
-  {id:'gion', lab:'r', name:'Higashiyama a Gion', jp:'東山・祇園', ll:[135.778,34.998], days:[7], tags:['chrámy','historie'], blurb:'Nejslavnější kus Kjóta. Přes den plný, ráno a večer kouzelný.', spots:[
+  {id:'gion', lab:'r', name:'Higashiyama a Gion', jp:'東山・祇園', ll:[135.778,34.998], days:[6], tags:['chrámy','historie'], blurb:'Nejslavnější kus Kjóta. Přes den plný, ráno a večer kouzelný.', spots:[
    ['⛩️','Kennin-ji','Nejstarší zenový chrám, drak na stropě',[135.7735,35.0005]],['📸','Ninenzaka a Sannenzaka','Před osmou ráno',[135.78,34.9985]],['🏮','Gion Shirakawa','Kanál s vrbami po setmění',[135.7748,35.006]],['⛩️','Yasaka-jinja','Otevřené i v noci',[135.7786,35.0037]]]},
-  {id:'pontocho', lab:'l', name:'Pontochō a Kawaramachi', jp:'先斗町', ll:[135.769,35.005], days:[7], tags:['jídlo','design'], blurb:'Úzká ulička restaurací nad řekou Kamo a nákupní centrum města.', spots:[
+  {id:'pontocho', lab:'l', name:'Pontochō a Kawaramachi', jp:'先斗町', ll:[135.769,35.005], days:[6], tags:['jídlo','design'], blurb:'Úzká ulička restaurací nad řekou Kamo a nákupní centrum města.', spots:[
    ['🍢','Pontochō','Večeře v uličce',[135.7712,35.0052]],['🍱','Trh Nishiki','Do poledne, pak davy',[135.765,35.005]],['🎨','D&Department Kyoto','Obchod s designem v areálu chrámu Bukkō-ji',[135.7622,34.9985]],['☕','Café Tsukiji','Kissaten z roku 1934',[135.7682,35.004]]]},
-  {id:'okazaki', lab:'r', name:'Okazaki a Filozofická stezka', jp:'岡崎', ll:[135.787,35.013], days:[7], tags:['muzea','zahrady'], blurb:'Muzejní čtvrť a klidná stezka podél kanálu k chrámům na úpatí hor.', spots:[
+  {id:'okazaki', lab:'r', name:'Okazaki a Filozofická stezka', jp:'岡崎', ll:[135.787,35.013], days:[6], tags:['muzea','zahrady'], blurb:'Muzejní čtvrť a klidná stezka podél kanálu k chrámům na úpatí hor.', spots:[
    ['🏛️','Kyoto City KYOCERA Museum of Art','',[135.7832,35.0128]],['🏛️','National Museum of Modern Art Kyoto','',[135.7803,35.0118]],['⛩️','Nanzen-ji a akvadukt','',[135.794,35.011]],['🥾','Filozofická stezka','Ráno',[135.7946,35.0232]],['⛩️','Hōnen-in','Mechová brána, zdarma a klidně',[135.7962,35.02]]]},
   {id:'kurama', lab:'r', name:'Kurama a Kibune', jp:'鞍馬・貴船', ll:[135.772,35.117], days:[8], tags:['hory','yōkai'], blurb:'Hory na severu, domov tenguů z legend. Stezka lesem mezi dvěma svatyněmi.', spots:[
    ['⛩️','Kurama-dera','',[135.7727,35.1178]],['🥾','Stezka Kurama → Kibune','cca 2 h, kořeny a schody',[135.7682,35.1192]],['⛩️','Kifune-jinja','Lampiony u schodů',[135.7628,35.1218]]]},
-  {id:'kitano', lab:'l', name:'Kitano a Ichijō', jp:'北野・一条', ll:[135.735,35.027], days:[8,9], tags:['yōkai','zen'], blurb:'Ulice yōkai, velká svatyně a zenový komplex Daitoku-ji s tichými zahradami.', spots:[
+  {id:'kitano', lab:'l', name:'Kitano a Ichijō', jp:'北野・一条', ll:[135.735,35.027], days:[7,8], tags:['yōkai','zen'], blurb:'Ulice yōkai, velká svatyně a zenový komplex Daitoku-ji s tichými zahradami.', spots:[
    ['👹','Ichijō Yōkai Street','Obchody se strašidly před vchodem',[135.7302,35.0232]],['⛩️','Kitano Tenman-gū','',[135.7352,35.0312]],['⛩️','Daitoku-ji: Kōtō-in','Bambusová cesta a mech',[135.7438,35.0435]],['⛩️','Daitoku-ji: Daisen-in','Suchá zahrada',[135.7458,35.0447]]]},
   {id:'uzumasa', lab:'b', name:'Uzumasa', jp:'太秦', ll:[135.708,35.016], days:[8], tags:['festival'], blurb:'Filmová studia, kde se konají yōkai průvody.', spots:[
    ['👹','Toei Uzumasa Studio Village','Průvod 10:30 / 14:30 / 16:00',[135.7088,35.0168]],['⛩️','Kōryū-ji','Socha Mirokua',[135.7055,35.015]]]},
-  {id:'demachi', lab:'l', name:'Demachiyanagi', jp:'出町柳', ll:[135.772,35.03], days:[9], tags:['místní život'], blurb:'Soutok dvou řek, studentská čtvrť, nádraží vláčku Eizan.', spots:[
+  {id:'demachi', lab:'l', name:'Demachiyanagi', jp:'出町柳', ll:[135.772,35.03], days:[7], tags:['místní život'], blurb:'Soutok dvou řek, studentská čtvrť, nádraží vláčku Eizan.', spots:[
    ['🍡','Demachi Futaba','Mame-mochi',[135.769,35.0302]],['🐢','Želví kameny na deltě','',[135.7722,35.0307]],['🛍️','Pasáž Demachi Masugata','',[135.7678,35.0292]],['⛩️','Shimogamo-jinja a les Tadasu','Prastarý les u soutoku',[135.773,35.039]]]},
-  {id:'fushimi', lab:'r', name:'Fushimi', jp:'伏見', ll:[135.772,34.967], days:[9], tags:['saké','brány'], blurb:'Tisíce oranžových bran a stará čtvrť pivovarů saké.', spots:[
+  {id:'fushimi', lab:'r', name:'Fushimi', jp:'伏見', ll:[135.772,34.967], days:[7], tags:['saké','brány'], blurb:'Tisíce oranžových bran a stará čtvrť pivovarů saké.', spots:[
    ['⛩️','Fushimi Inari','Před 7:30, pak horní okruh',[135.7727,34.9671]],['🍶','Gekkeikan Okura muzeum','Degustace',[135.761,34.9332]],['🚣','Plavba po kanálu Horikawa','Loďky Jikkokubune mezi sklady saké',[135.764,34.9315]]]},
-  {id:'ichijoji', lab:'r', name:'Ichijōji', jp:'一乗寺', ll:[135.787,35.045], days:[9], tags:['ramen','knihy'], blurb:'Studentský sever: ramen, knihkupectví, chrám s pěknou zahradou.', spots:[
+  {id:'ichijoji', lab:'r', name:'Ichijōji', jp:'一乗寺', ll:[135.787,35.045], days:[7], tags:['ramen','knihy'], blurb:'Studentský sever: ramen, knihkupectví, chrám s pěknou zahradou.', spots:[
    ['🍜','Ramen Street','',[135.7872,35.0452]],['📚','Keibunsha','Knihkupectví, které stojí za cestu',[135.7885,35.0472]],['⛩️','Shisen-dō','Zahrada s bílým pískem',[135.7965,35.045]]]}
  ]},
  osaka:{name:'Ósaka', base:[135.502,34.666], baseName:'Ubytování', d:[
-  {id:'namba', lab:'r', name:'Namba a Dōtonbori', jp:'難波', ll:[135.501,34.668], days:[10], tags:['základna','jídlo'], blurb:'Neony, jídlo a noční život. Nejlepší v bočních uličkách.', spots:[
+  {id:'namba', lab:'r', name:'Namba a Dōtonbori', jp:'難波', ll:[135.501,34.668], days:[9,10], tags:['základna','jídlo'], blurb:'Neony, jídlo a noční život. Nejlepší v bočních uličkách.', spots:[
    ['🏮','Hōzen-ji Yokochō','Dlážděná ulička a mechová socha',[135.5025,34.668]],['🍢','Ura-Namba','Izakaye pod tratí',[135.5055,34.6632]],['🛍️','Trh Kuromon','Ráno',[135.5068,34.6658]],['🛍️','Sennichimae Dōguyasuji','Kuchyňské nože a vybavení',[135.5035,34.664]],['📸','Dōtonbori','Neony po setmění',[135.501,34.6688]]]},
-  {id:'horie', lab:'l', name:'Horie a Amerikamura', jp:'堀江', ll:[135.494,34.672], days:[], tags:['design','vintage'], blurb:'Designové obchody, vintage a kavárny, pět minut od Namby.', spots:[
+  {id:'horie', lab:'l', name:'Horie a Amerikamura', jp:'堀江', ll:[135.494,34.672], days:[10], tags:['design','vintage'], blurb:'Designové obchody, vintage a kavárny, pět minut od Namby.', spots:[
    ['🛍️','Minami-Horie','Nábytek a design',[135.493,34.6725]],['🛍️','Amerikamura','Vintage a streetwear',[135.499,34.6722]]]},
   {id:'shinsekai', lab:'r', name:'Shinsekai', jp:'新世界', ll:[135.506,34.652], days:[11], tags:['retro'], blurb:'Retro čtvrť z roku 1912, kushikatsu a věž Tsūtenkaku.', spots:[
    ['🍢','Kushikatsu','Nemáčejte dvakrát do omáčky',[135.5058,34.6515]],['📸','Tsūtenkaku','',[135.5063,34.6526]],['📸','Abeno Harukas','Vyhlídka z nejvyšší budovy',[135.514,34.646]]]},
-  {id:'nakazaki', lab:'l', name:'Nakazakichō', jp:'中崎町', ll:[135.506,34.707], days:[], tags:['kavárny','vintage'], blurb:'Přežilé předválečné domky nagaya, dnes kavárny, galerie a vintage.', spots:[
+  {id:'nakazaki', lab:'l', name:'Nakazakichō', jp:'中崎町', ll:[135.506,34.707], days:[10], tags:['kavárny','vintage'], blurb:'Přežilé předválečné domky nagaya, dnes kavárny, galerie a vintage.', spots:[
    ['☕','Kavárny v nagaya','',[135.506,34.7072]],['🛍️','Vintage a malé obchody','',[135.5078,34.706]]]},
-  {id:'tenma', lab:'r', name:'Tenma', jp:'天満', ll:[135.512,34.703], days:[11], tags:['bary'], blurb:'Labyrint levných izakají a nejdelší nákupní ulice Japonska.', spots:[
+  {id:'tenma', lab:'r', name:'Tenma', jp:'天満', ll:[135.512,34.703], days:[10], tags:['bary'], blurb:'Labyrint levných izakají a nejdelší nákupní ulice Japonska.', spots:[
    ['🍸','Uličky kolem stanice Tenma','',[135.5122,34.7045]],['🛍️','Tenjinbashi-suji','2,6 km krytá ulice',[135.5115,34.698]]]},
-  {id:'nakanoshima', lab:'l', name:'Umeda a Nakanoshima', jp:'梅田・中之島', ll:[135.494,34.693], days:[], tags:['muzea','výhled'], blurb:'Ostrov muzeí mezi dvěma řekami a mrakodrapy Umedy.', spots:[
+  {id:'nakanoshima', lab:'l', name:'Umeda a Nakanoshima', jp:'梅田・中之島', ll:[135.494,34.693], days:[10], tags:['muzea','výhled'], blurb:'Ostrov muzeí mezi dvěma řekami a mrakodrapy Umedy.', spots:[
    ['🏛️','Nakanoshima Museum of Art','Černá krychle z roku 2022',[135.4927,34.6925]],['🏛️','National Museum of Art Osaka','Podzemní muzeum',[135.4903,34.6912]],['📸','Umeda Sky Building','Floating Garden při západu',[135.4905,34.7055]]]}
  ]}
 };
@@ -776,11 +772,7 @@ capMesh.count=caps; world.add(mountMesh); world.add(capMesh);
 (function(){ const f=V('fuji'); const g=new THREE.ConeGeometry(1.9,2.8,9,1); g.translate(0,1.4,0);
   const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:'#4f5c6e', flatShading:true, roughness:.9})); m.position.set(f.x,LAND_TOP-0.05,f.z); world.add(m);
   const c=new THREE.ConeGeometry(0.8,1.18,9,1); c.translate(0,0.59,0); const cm=new THREE.Mesh(c,new THREE.MeshStandardMaterial({color:'#f6f3ec', flatShading:true})); cm.position.set(f.x,LAND_TOP-0.05+1.64,f.z); world.add(cm); })();
-// Mihara volcano + smoke
 const smoke=[];
-(function(){ const p=V('mihara'); const g=new THREE.CylinderGeometry(0.12,0.42,0.45,8,1,true); g.translate(0,0.22,0);
-  const m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:'#2b2826', flatShading:true, side:THREE.DoubleSide})); m.position.set(p.x,LAND_TOP,p.z); world.add(m);
-  for(let i=0;i<6;i++){ const s=new THREE.Mesh(new THREE.IcosahedronGeometry(0.09,0), new THREE.MeshStandardMaterial({color:'#d9d4cc', transparent:true, opacity:.6, flatShading:true})); s.userData.ph=i/6; s.userData.o=p; world.add(s); smoke.push(s);} })();
 
 // city blocks
 const TILEB=[[139.638,35.618,139.822,35.745],[135.672,34.925,135.828,35.132],[135.425,34.638,135.545,34.728]];
@@ -924,11 +916,17 @@ async function initArt(){
   try{ if(window.claude && claude.use){ ART=await claude.use('artifact'); } }catch(e){ ART=null; }
   canEdit=true; LOCAL=!ART;
   if(LOCAL){ try{ const ls=JSON.parse(localStorage.getItem('japan-state')||'null'); if(ls){ const ids=new Set(STATE.places.map(p=>p.id)); (ls.places||[]).forEach(p=>{ if(!ids.has(p.id)) STATE.places.push(p); }); const pids=new Set(STATE.photos.map(p=>p.id)); (ls.photos||[]).forEach(p=>{ if(!pids.has(p.id)) STATE.photos.push(p); }); Object.assign(STATE.checks, ls.checks||{}); STATE.likes=Object.assign({},STATE.likes||{},ls.likes||{}); if(ls.wish) STATE.wish=ls.wish; } }catch(e){} }
+  // Přeplánování 28. 9.: místa a fotky uložené u starých dní přesunout na nové pořadí dní.
+  try{ if(localStorage.getItem('japan-days')!=='2'){ const M={5:4,6:5,7:6,9:7,10:9}; STATE.places.concat(STATE.photos).forEach(p=>{ if(p.day in M) p.day=M[p.day]; }); localStorage.setItem('japan-days','2'); if(LOCAL && (STATE.places.length||STATE.photos.length)) localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]}})); } }catch(e){}
   renderPanel(cur); questProgress();
 }
 
 function isChecked(k){ return !!(STATE.checks[k] || localChecks[k]); }
-function questProgress(){ let t=0,d=0; DAYS.forEach((day,i)=>day.verify.forEach((v,j)=>{ t++; if(isChecked(i+'-'+j)) d++; })); $('qfill').style.width=(t? d/t*100:0)+'%'; $('qtext').textContent=d+'/'+t; }
+// Klíče checklistu v2 (od přeplánování 28. 9.). Položky, které se nezměnily, převezmou odškrtnutí ze starého klíče.
+const LEGACY_CK={'v2:0-1':'0-1','v2:5-1':'6-1','v2:8-0':'8-0','v2:8-1':'8-1','v2:11-0':'11-0','v2:11-1':'11-1','v2:12-0':'12-0','v2:12-1':'12-1'};
+function ckKey(i,j){ return 'v2:'+i+'-'+j; }
+function isCk(k){ return isChecked(k) || !!(LEGACY_CK[k] && isChecked(LEGACY_CK[k])); }
+function questProgress(){ let t=0,d=0; DAYS.forEach((day,i)=>day.verify.forEach((v,j)=>{ t++; if(isCk(ckKey(i,j))) d++; })); $('qfill').style.width=(t? d/t*100:0)+'%'; $('qtext').textContent=d+'/'+t; }
 function setCheck(k,v){
   if(canEdit){ if(v) STATE.checks[k]=true; else { delete STATE.checks[k]; } delete localChecks[k]; if(SB) sbWrite(v? SB.from('checks').upsert({k},{ignoreDuplicates:true}) : SB.from('checks').delete().eq('k',k)); saveSoon(); }
   else { if(v) localChecks[k]=true; else delete localChecks[k]; }
@@ -1007,14 +1005,14 @@ function renderPanel(i){
     '<h2 class="p-title">'+esc(d.title)+'</h2><div class="p-meta"><span><strong>'+esc(d.night)+'</strong></span><span>'+esc(d.weather)+'</span></div><div class="p-kanji" aria-hidden="true">'+d.jp+'</div>';
   let h=photoSec(i)+timelineSec(i)+districtsSec(i); try{ refreshUserPins(); }catch(e){}
   h+='<div class="sec"><h3>Tipy</h3><ul class="tips">'+d.tips.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul></div>';
-  h+='<div class="sec"><h3>Ověřit a zarezervovat</h3>'+(d.verify.length? d.verify.map((v,j)=>'<label class="check"><input type="checkbox" id="q-'+i+'-'+j+'" data-q="'+i+'-'+j+'"'+(isChecked(i+'-'+j)?' checked':'')+'><span>'+esc(v)+'</span></label>').join('') : '<p class="none">Nic, užijte si den.</p>')+'</div>';
+  h+='<div class="sec"><h3>Ověřit a zarezervovat</h3>'+(d.verify.length? d.verify.map((v,j)=>'<label class="check"><input type="checkbox" id="q-'+i+'-'+j+'" data-q="'+ckKey(i,j)+'"'+(isCk(ckKey(i,j))?' checked':'')+'><span>'+esc(v)+'</span></label>').join('') : '<p class="none">Nic, užijte si den.</p>')+'</div>';
   $('pbody').innerHTML=h;
   $('prev').disabled=i===0; $('next').disabled=i===DAYS.length-1;
   document.querySelectorAll('.chip').forEach((b,k)=>{ b.classList.toggle('on',k===i); b.classList.toggle('done',k<i); });
   const chip=document.querySelectorAll('.chip')[i]; if(chip && chip.scrollIntoView && innerWidth<=820) chip.scrollIntoView({block:'nearest',inline:'center',behavior:reduce?'auto':'smooth'});
 }
 // delegated panel events
-$('pbody').addEventListener('change',e=>{ const q=e.target.dataset&&e.target.dataset.q; if(q) setCheck(q,e.target.checked); });
+$('pbody').addEventListener('change',e=>{ const q=e.target.dataset&&e.target.dataset.q; if(q){ setCheck(q,e.target.checked); const old=LEGACY_CK[q]; if(!e.target.checked && old && isChecked(old)) setCheck(old,false); } });
 $('pbody').addEventListener('click',e=>{
   const t=e.target.closest('[data-del],[data-add],[data-ph],[data-go],[data-spot],[data-addph]'); if(!t) return;
   if(t.dataset.addph){ pendingItem=t.dataset.addph; $('ph-in').click(); return; }
@@ -1078,7 +1076,7 @@ function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 
 
 /* ---------------- CITY MAPS: map-style tiles laid onto the 3D Japan ---------------- */
-const CITY_DAYS={0:'tokyo',1:'tokyo',7:'kyoto',8:'kyoto',9:'kyoto',10:'osaka'};
+const CITY_DAYS={0:'tokyo',1:'tokyo',2:'tokyo',3:'tokyo',6:'kyoto',7:'kyoto',8:'kyoto',9:'osaka',10:'osaka'};
 const CITY_EN={tokyo:'Tokyo',kyoto:'Kyoto',osaka:'Osaka'};
 const GM={land:'#eef0ea',water:'#a8d2f3',park:'#c6e6bf',road:'#ffffff',roadCase:'#d3d7dc',major:'#fde39a',majorCase:'#e9b949',edge:'#0a1422'};
 const KM=S/111; // world units per km (north-south)
@@ -1124,10 +1122,13 @@ const CT={
 const CITY_ROUTES={
  0:['base','asakusa:0','asakusa:1','base'],
  1:['base','yanaka:0','yanaka:1','kiyosumi:0','kiyosumi:2','shimokita:0','shimokita:1','shibuya:0','koenji:0','base'],
- 7:[[135.7588,34.9858],'base','pontocho:1','okazaki:0','okazaki:3','pontocho:0','gion:2'],
+ 2:['base','shibuya:1','shibuya:2','shibuya:3','shibuya:5','shibuya:4','shinjuku:1','shinjuku:0','base'],
+ 3:['base','asakusa:4','asakusa:3','asakusa:2','asakusa:5','roppongi:0','roppongi:1','base'],
+ 6:[[135.7588,34.9858],'base','pontocho:1','okazaki:0','okazaki:3','pontocho:0','gion:2'],
+ 7:['base','fushimi:0','fushimi:1','demachi:0','demachi:1','kitano:2','ichijoji:1','ichijoji:0'],
  8:['base','kurama:0','kurama:2','kitano:0','uzumasa:1','uzumasa:0','base'],
- 9:['base','fushimi:0','fushimi:1','demachi:0','demachi:1','kitano:2','ichijoji:1','ichijoji:0'],
- 10:[[135.5015,34.6655],'base','namba:0','namba:1']
+ 9:[[135.5015,34.6655],'base','namba:0','namba:1'],
+ 10:['base','namba:2','namba:3','horie:0','horie:1','nakazaki:0','nakanoshima:2','tenma:0','base']
 };
 const CAT_COL={'🏛️':'#1a8fa6','🎨':'#d24f8c','⛩️':'#e0482f','🍜':'#ef8a17','🍢':'#ef8a17','🍡':'#ef8a17','🍱':'#ef8a17','🍣':'#ef8a17','☕':'#a0652b','🍸':'#7b5cd6','🎸':'#7b5cd6','🏮':'#ef8a17','🛍️':'#2f6fe0','🌳':'#2e9a4a','🌿':'#2e9a4a','🐢':'#2e9a4a','🥾':'#2e9a4a','📸':'#546e7a','🌉':'#546e7a','♨️':'#1c93c9','📚':'#8d6e3f','👹':'#c2185b','🍶':'#8d6e3f','🚣':'#1c93c9','⭐':'#d19a00'};
 const cityLabels=[]; const cityGroup=new THREE.Group(); scene.add(cityGroup);
