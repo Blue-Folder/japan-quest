@@ -2,5 +2,5 @@
 // Doplň z Supabase: Project Settings → API → Project URL a anon public key.
 window.JQ_CONFIG = {
   url: 'https://siplmcosgnohlhxknsgn.supabase.co',
-  key: ''
+  key: 'sb_publishable_oaqd8098kGJwXYwSQ5dwOA__6djDpxt'
 };
