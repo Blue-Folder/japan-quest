@@ -327,7 +327,7 @@ dialog.sheet{width:min(560px,100%);max-width:100%;height:min(86vh,760px);max-hei
 @media (max-width: 820px){
   body{overflow:auto}
   #app{display:flex;flex-direction:column;height:auto;min-height:100%}
-  #stage{position:relative;height:56vh;min-height:340px;flex:none}
+  #stage{position:relative;height:56vh;height:56svh;min-height:340px;flex:none}
   .brand{font-size:0;line-height:1}
   .brand em{font-size:30px}
   .hud{top:10px;gap:4px}
@@ -342,6 +342,26 @@ dialog.sheet{width:min(560px,100%);max-width:100%;height:min(86vh,760px);max-hei
   .regions,.chips{min-width:620px}
   #panel{position:relative;right:auto;top:auto;bottom:auto;width:auto;margin:8px 16px 16px;flex:none}
   .p-body{overflow:visible}
+}
+
+/* úzké telefony (iPhone 16 Pro 402 px, 16 / 15 393 px, mini 375 px): dny se vejdou bez posouvání */
+@media (max-width: 440px){
+  #timeline{overflow:visible;padding:10px 12px 2px}
+  .regions,.chips{min-width:0;gap:3px}
+  .regions{font-size:9px;letter-spacing:.06em}
+  .chip{padding:6px 0 5px;border-radius:8px}
+  .chip b{font-size:15px}
+  .chip small{font-size:8.5px;letter-spacing:.02em}
+  .chip.on{transform:translateY(-2px)}
+  .chip.done::after{top:3px;right:3px;width:4px;height:4px}
+  #panel{margin:8px 12px 16px}
+  .p-head{padding:16px 16px 12px}
+  .p-body{padding:4px 16px 14px}
+  .p-title{font-size:28px}
+  .kicker{max-width:calc(100vw - 90px)}
+}
+@media (display-mode: standalone) and (max-width: 820px){
+  #stage{height:52svh}
 }
 @media (prefers-reduced-motion: reduce){ .chip,.qbar i,.lab{transition:none} }
 </style>
