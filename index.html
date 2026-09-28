@@ -322,6 +322,8 @@ dialog.sheet{width:min(560px,100%);max-width:100%;height:min(86vh,760px);max-hei
 .wl li{display:flex;align-items:center;gap:8px;background:rgba(242,235,220,.04);border-radius:10px;padding:2px 8px}
 .wl li .check{flex:1}.wl li.done .check span{color:var(--muted);text-decoration:line-through}
 
+#avatar[data-sync="on"]::after,#avatar[data-sync="off"]::after{content:"";position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;border:2px solid #0d1929;background:#34c759}
+#avatar[data-sync="off"]::after{background:#ff9f0a}
 @media (max-width: 820px){
   body{overflow:auto}
   #app{display:flex;flex-direction:column;height:auto;min-height:100%}
@@ -413,6 +415,8 @@ dialog.sheet{width:min(560px,100%);max-width:100%;height:min(86vh,760px);max-hei
 </dialog>
 <script type="application/json" id="trip-state">{"v": 1, "places": [], "photos": [], "checks": {}, "likes": {}, "wish": {"b": [], "p": []}}</script>
 
+<script src="vendor/supabase-2.117.2.js"></script>
+<script src="config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script>
@@ -882,7 +886,7 @@ function buildDoc(){
 }
 function toast(msg,ms){ const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(t._h); if(ms!==0) t._h=setTimeout(()=>t.hidden=true, ms||3500); }
 async function save(){
-  if(LOCAL||!ART){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]}})); toast('Uloženo jen v tomto zařízení'); return true; }catch(e){ toast('V tomto zařízení už není místo. Smažte pár fotek.'); return false; } }
+  if(LOCAL||!ART){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]}})); toast(SB?'Uloženo':'Uloženo jen v tomto zařízení'); return true; }catch(e){ toast('V tomto zařízení už není místo. Smažte pár fotek.'); return false; } }
   const html=buildDoc();
   if(html.length>15.5e6){ toast('Stránka je plná. Smažte pár fotek.'); return false; }
   saving=true; toast('Ukládám…',0);
@@ -906,7 +910,7 @@ async function initArt(){
 function isChecked(k){ return !!(STATE.checks[k] || localChecks[k]); }
 function questProgress(){ let t=0,d=0; DAYS.forEach((day,i)=>day.verify.forEach((v,j)=>{ t++; if(isChecked(i+'-'+j)) d++; })); $('qfill').style.width=(t? d/t*100:0)+'%'; $('qtext').textContent=d+'/'+t; }
 function setCheck(k,v){
-  if(canEdit){ if(v) STATE.checks[k]=true; else { delete STATE.checks[k]; } delete localChecks[k]; saveSoon(); }
+  if(canEdit){ if(v) STATE.checks[k]=true; else { delete STATE.checks[k]; } delete localChecks[k]; if(SB) sbWrite(v? SB.from('checks').upsert({k},{ignoreDuplicates:true}) : SB.from('checks').delete().eq('k',k)); saveSoon(); }
   else { if(v) localChecks[k]=true; else delete localChecks[k]; }
   try{ localStorage.setItem('japan-quests',JSON.stringify(localChecks)); }catch(e){}
   questProgress();
@@ -1207,7 +1211,7 @@ function setMe(v){ try{ localStorage.setItem('japan-me',v); }catch(e){} updateMe
 function likeKey(L){ return L.own? 'own:'+L.pid : 'spot:'+L.city+'|'+L.distId+':'+L.k; }
 function likesOf(key){ return (STATE.likes&&STATE.likes[key])||{}; }
 function likeCls(key){ const l=likesOf(key); return l.b&&l.p?'lk-both':l.b?'lk-b':l.p?'lk-p':''; }
-function toggleLike(key,who){ STATE.likes=STATE.likes||{}; const l=Object.assign({},STATE.likes[key]||{}); if(l[who]) delete l[who]; else l[who]=true; if(l.b||l.p) STATE.likes[key]=l; else delete STATE.likes[key]; refreshLikeBadges(); saveSoon(); }
+function toggleLike(key,who){ STATE.likes=STATE.likes||{}; const l=Object.assign({},STATE.likes[key]||{}); if(l[who]) delete l[who]; else l[who]=true; if(l.b||l.p) STATE.likes[key]=l; else delete STATE.likes[key]; refreshLikeBadges(); if(SB){ sbWrite(l[who]? SB.from('likes').upsert({key,who},{ignoreDuplicates:true}) : SB.from('likes').delete().eq('key',key).eq('who',who)); cacheLocal(); } else saveSoon(); }
 function refreshLikeBadges(){ cityLabels.forEach(L=>{ if(L.kind!=='pin') return; const c=likeCls(likeKey(L)); L.el.classList.remove('lk-b','lk-p','lk-both'); if(c) L.el.classList.add(c); }); }
 function heartsHTML(key){ const l=likesOf(key), me=getMe(); if(l.b&&l.p) return '<div class="hearts both"><button type="button" class="hrt wine on" data-like="'+esc(key)+'" aria-label="Obě chceme">'+HEART+'</button></div>';
   return '<div class="hearts">'+['b','p'].map(w=>'<button type="button" class="hrt '+w+(l[w]?' on':'')+(me&&me!==w?' other':'')+'" data-like="'+esc(key)+'" data-who="'+w+'" aria-pressed="'+(!!l[w])+'" aria-label="'+(w==='b'?'Modré srdíčko':'Fialové srdíčko')+'">'+HEART+'</button>').join('')+'</div>'; }
@@ -1268,6 +1272,29 @@ function updateCityLabels(w,h,dcam){ const boxes=[]; const hit=(x,y,bw,bh)=>{ fo
     if(L.kind==='dist' && hit(sx2-L.d.name.length*4.5,sy2-8,L.d.name.length*9,16)){ L.el.style.opacity=0; return; }
     if(L.kind==='dist') L.el.classList.toggle('far', dcam>2.2);
     const off=(L.kind==='pin'||L.kind==='home')?'translate(-12px,-31px)':(L.kind==='dist'?'translate(-50%,-50%)':'translate(-50%,-100%)'); L.el.style.transform='translate('+((tmp.x+1)/2*w)+'px,'+((1-tmp.y)/2*h)+'px) '+off; }); }
+
+
+/* ---------------- SHARED SYNC (Supabase) ---------------- */
+let SB=null, pullTimer=null;
+function cacheLocal(){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]}})); }catch(e){} }
+function setSync(st){ const a=$('avatar'); if(a) a.dataset.sync=st; }
+async function sbWrite(q){ try{ const r=await q; if(r&&r.error) throw r.error; setSync('on'); }catch(e){ setSync('off'); toast('Nepodařilo se uložit, zkontroluj připojení.'); schedulePull(); } }
+function refreshShared(){ refreshLikeBadges(); rerenderHearts(); renderPanel(cur); questProgress(); }
+async function pullAll(){ if(!SB) return;
+  try{ const [l,w,c]=await Promise.all([SB.from('likes').select('key,who'),SB.from('wish').select('id,who,t,c,done,created_at').order('created_at'),SB.from('checks').select('k')]);
+    if(l.error||w.error||c.error) throw (l.error||w.error||c.error);
+    const likes={}; l.data.forEach(r=>{ (likes[r.key]=likes[r.key]||{})[r.who]=true; }); STATE.likes=likes;
+    const wish={b:[],p:[]}; w.data.forEach(r=>{ if(wish[r.who]) wish[r.who].push({id:r.id,t:r.t,c:r.c,done:!!r.done}); }); STATE.wish=wish;
+    const ch={}; c.data.forEach(r=>{ ch[r.k]=true; }); STATE.checks=ch;
+    cacheLocal(); refreshShared(); setSync('on');
+  }catch(e){ setSync('off'); } }
+function schedulePull(){ clearTimeout(pullTimer); pullTimer=setTimeout(pullAll,350); }
+function initSync(){ const C=window.JQ_CONFIG; if(!C||!C.url||!C.key||!window.supabase) return;
+  try{ SB=supabase.createClient(C.url,C.key,{auth:{persistSession:false}}); }catch(e){ SB=null; return; }
+  pullAll();
+  SB.channel('trip').on('postgres_changes',{event:'*',schema:'public',table:'likes'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'wish'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'checks'},schedulePull).subscribe();
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) pullAll(); });
+  addEventListener('online',pullAll); }
 
 /* ---------------- CAMERA & TOKEN ---------------- */
 let cur=0, tween=null, trip=null;
@@ -1377,7 +1404,7 @@ function renderProfile(){
     WCATS.forEach(c=>{ const items=list.filter(x=>x.c===c[0]); if(!items.length) return; h+='<div class="nb-cat"><h5>'+c[0]+' '+c[1]+'</h5><ul class="wl">'+items.map(x=>'<li class="'+(x.done?'done':'')+'"><label class="check"><input type="checkbox" data-wdone="'+x.id+'"'+(x.done?' checked':'')+(edit?'':' disabled')+'><span>'+esc(x.t)+'</span></label>'+(edit?'<button type="button" class="del" data-wdel="'+x.id+'" aria-label="Smazat">×</button>':'')+'</li>').join('')+'</ul></div>'; });
   }
   $('prof-body').innerHTML=h;
-  const f=$('wish-form'); if(f) f.addEventListener('submit',e=>{ e.preventDefault(); const t=$('wish-t').value.trim(); if(!t) return; STATE.wish=STATE.wish||{b:[],p:[]}; (STATE.wish[me]=STATE.wish[me]||[]).push({id:'w'+Date.now().toString(36),t:t.slice(0,80),c:$('wish-c').value,done:false}); renderProfile(); saveSoon(); });
+  const f=$('wish-form'); if(f) f.addEventListener('submit',e=>{ e.preventDefault(); const t=$('wish-t').value.trim(); if(!t) return; STATE.wish=STATE.wish||{b:[],p:[]}; const it={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:t.slice(0,80),c:$('wish-c').value,done:false}; (STATE.wish[me]=STATE.wish[me]||[]).push(it); renderProfile(); if(SB){ sbWrite(SB.from('wish').insert(Object.assign({who:me},it))); cacheLocal(); } else saveSoon(); });
 }
 $('prof-dlg').addEventListener('click',e=>{
   const t=e.target.closest('[data-view],[data-tab],#who-sw,[data-open],[data-wdel]'); if(!t) return;
@@ -1385,9 +1412,9 @@ $('prof-dlg').addEventListener('click',e=>{
   if(t.dataset.tab){ profTab=t.dataset.tab; try{ sessionStorage.setItem('japan-sheet',profTab); }catch(e){} renderProfile(); return; }
   if(t.id==='who-sw'){ openMe(()=>{ profView=getMe(); renderProfile(); }); return; }
   if(t.dataset.open){ const r=resolveKey(t.dataset.open); closeProfile(); if(!r) return; if(r.day!=null) go(r.day,{dur:900}); if(r.distId!=null) setTimeout(()=>flyToSpot(r.city,r.distId+':'+r.k),950); return; }
-  if(t.dataset.wdel){ const me=getMe(); if(t.dataset.armed){ STATE.wish[me]=(STATE.wish[me]||[]).filter(x=>x.id!==t.dataset.wdel); renderProfile(); saveSoon(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); } }
+  if(t.dataset.wdel){ const me=getMe(); if(t.dataset.armed){ const wid=t.dataset.wdel; STATE.wish[me]=(STATE.wish[me]||[]).filter(x=>x.id!==wid); renderProfile(); if(SB){ sbWrite(SB.from('wish').delete().eq('id',wid)); cacheLocal(); } else saveSoon(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); } }
 });
-$('prof-dlg').addEventListener('change',e=>{ const id=e.target.dataset&&e.target.dataset.wdone; if(!id) return; const me=getMe(); const it=(STATE.wish[me]||[]).find(x=>x.id===id); if(it){ it.done=e.target.checked; e.target.closest('li').classList.toggle('done',it.done); saveSoon(); } });
+$('prof-dlg').addEventListener('change',e=>{ const id=e.target.dataset&&e.target.dataset.wdone; if(!id) return; const me=getMe(); const it=(STATE.wish[me]||[]).find(x=>x.id===id); if(it){ it.done=e.target.checked; e.target.closest('li').classList.toggle('done',it.done); if(SB){ sbWrite(SB.from('wish').update({done:it.done}).eq('id',it.id)); cacheLocal(); } else saveSoon(); } });
 $('prof-x').addEventListener('click',closeProfile);
 $('prof-dlg').addEventListener('close',()=>{ try{ sessionStorage.removeItem('japan-sheet'); }catch(e){} });
 // profile
@@ -1401,6 +1428,7 @@ try{ const ls=parseInt(localStorage.getItem('japan-day'),10); if(ls>=0&&ls<13) s
 const m=/^#den(\d+)$/.exec(location.hash||''); if(m && !fromSave) start=Math.max(0,Math.min(12,parseInt(m[1],10)-1));
 go(start, fromSave? {dur:0, delay:0} : {dur:2600, delay:1200});
 initArt();
+initSync();
 try{ const sh=sessionStorage.getItem('japan-sheet'); if(sh&&getMe()) setTimeout(()=>openProfile(sh),300); }catch(e){}
 })();
 </script>

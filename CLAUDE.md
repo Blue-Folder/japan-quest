@@ -19,13 +19,15 @@ Dva profily bez jmen: `b` = 🧸 modré srdíčko, `p` = 🌚 fialové srdíčko
 Aktuální profil je v `localStorage['japan-me']`.
 
 ## Stav ukládání – DŮLEŽITÉ
-Appka vznikla jako Claude artifact, kde se data ukládala republikováním stránky. Mimo artifact
-(`window.claude` neexistuje) běží v režimu `LOCAL`: vše se ukládá jen do `localStorage` daného telefonu.
-**Srdíčka, wishlist a přidaná místa se zatím mezi telefony NESDÍLÍ.**
+- Srdíčka (`likes`), wishlist (`wish`) a checklist (`checks`) se sdílí přes Supabase: `config.js`
+  (URL + anon key), knihovna `vendor/supabase-2.117.2.js`, schéma `supabase-setup.sql`.
+  Sync: `initSync()` → `pullAll()` + realtime odběr; zápisy přes `sbWrite()`; lokální cache v `localStorage['japan-state']`.
+  Tečka na ikoně profilu: zelená = spojeno, oranžová = chyba/offline.
+- Bez vyplněného `config.js` běží vše jen lokálně v telefonu.
+- Vlastní místa a fotky jsou zatím JEN lokální (localStorage).
 
 ## Další kroky
-1. Sdílená data: Supabase (tabulka `trip_state` nebo tabulky likes / wishlist / places / photos),
-   realtime odběr, nahradit funkci `save()` a načítání `STATE`. Fotky do Supabase Storage místo data URI.
+1. Sdílet i vlastní místa (tabulka `places`) a fotky (Supabase Storage místo data URI).
 2. Odstranit zbytky artifact režimu (`SKEL`, `buildDoc`, `ART`, přeposílání přes `trip-src`).
 3. Skutečné fotky míst (např. Wikimedia Commons API) a volitelně skutečná mapa (MapLibre + OSM dlaždice).
 4. Rozdělit `index.html` na moduly, až to bude potřeba.
