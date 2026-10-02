@@ -15,7 +15,7 @@ z větve `main`, každý push se kamarádce po otevření appky sám načte (ser
 - `sw.js` – service worker
 
 ## Profily
-Dva profily bez jmen: `b` = 🧸 modré srdíčko, `p` = 🌚 fialové srdíčko. Obě srdíčka = vínové (#722f37).
+Dva profily bez jmen: `b` = 🧸 modré srdíčko, `p` = 🧜‍♀️ fialové srdíčko. Obě srdíčka = vínové (#722f37).
 Aktuální profil je v `localStorage['japan-me']`.
 
 ## Stav ukládání – DŮLEŽITÉ
@@ -24,10 +24,11 @@ Aktuální profil je v `localStorage['japan-me']`.
   Sync: `initSync()` → `pullAll()` + realtime odběr; zápisy přes `sbWrite()`; lokální cache v `localStorage['japan-state']`.
   Tečka na ikoně profilu: zelená = spojeno, oranžová = chyba/offline.
 - Bez vyplněného `config.js` běží vše jen lokálně v telefonu.
-- Vlastní místa a fotky jsou zatím JEN lokální (localStorage).
+- Vlastní místa (`places`, sloupec `who` = kdo přidal) a vyřazené body itineráře (`hidden`, klíče `tl:den-index`) se sdílí taky (krok 2 v `supabase-setup.sql`). Když tabulky chybí, `SB_PLACES=false` a místa zůstanou lokální.
+- Fotky jsou zatím JEN lokální (localStorage).
 
 ## Další kroky
-1. Sdílet i vlastní místa (tabulka `places`) a fotky (Supabase Storage místo data URI).
+1. Sdílet fotky (Supabase Storage místo data URI).
 2. Odstranit zbytky artifact režimu (`SKEL`, `buildDoc`, `ART`, přeposílání přes `trip-src`).
 3. Skutečné fotky míst (např. Wikimedia Commons API) a volitelně skutečná mapa (MapLibre + OSM dlaždice).
 4. Rozdělit `index.html` na moduly, až to bude potřeba.

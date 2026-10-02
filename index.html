@@ -324,6 +324,15 @@ dialog.sheet{width:min(560px,100%);max-width:100%;height:min(86vh,760px);max-hei
 
 #avatar[data-sync="on"]::after,#avatar[data-sync="off"]::after{content:"";position:absolute;right:0;bottom:0;width:10px;height:10px;border-radius:50%;border:2px solid #0d1929;background:#34c759}
 #avatar[data-sync="off"]::after{background:#ff9f0a}
+
+.tl-acts{display:flex;gap:6px;margin-top:6px;align-items:center}
+.act{appearance:none;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:8px;font:500 11.5px var(--body);padding:4px 8px;cursor:pointer}
+.act:hover{color:var(--paper);border-color:rgba(242,235,220,.3)}
+.tl-acts .del{margin-top:0}
+ol.tl li.hid .tl-c{opacity:.45}
+ol.tl li.hid p{text-decoration:line-through}
+.showhid{margin-top:8px}
+.by{font-size:13px;margin-left:4px}
 @media (max-width: 820px){
   body{overflow:auto}
   #app{display:flex;flex-direction:column;height:auto;min-height:100%}
@@ -423,7 +432,7 @@ dialog.sheet{width:min(560px,100%);max-width:100%;height:min(86vh,760px);max-hei
     <div class="dlg-act"><button type="button" id="add-cancel">Zrušit</button><button type="submit" class="pri">Přidat</button></div>
   </form>
 </dialog>
-<dialog id="me-dlg" aria-labelledby="me-t"><div class="dlg-in"><h2 id="me-t">Kdo jsi?</h2><p class="hint" style="margin:0">Telefon si tvůj profil zapamatuje. Označuješ pak svým srdíčkem a máš svůj wishlist.</p><div class="me-pick"><button type="button" class="me-o b" data-me="b"><span class="av b">🧸</span><span class="hrt-s b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button><button type="button" class="me-o p" data-me="p"><span class="av p">🌚</span><span class="hrt-s p"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button></div><div class="dlg-act"><button type="button" id="me-cancel">Zavřít</button></div></div></dialog>
+<dialog id="me-dlg" aria-labelledby="me-t"><div class="dlg-in"><h2 id="me-t">Kdo jsi?</h2><p class="hint" style="margin:0">Telefon si tvůj profil zapamatuje. Označuješ pak svým srdíčkem a máš svůj wishlist.</p><div class="me-pick"><button type="button" class="me-o b" data-me="b"><span class="av b">🧸</span><span class="hrt-s b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button><button type="button" class="me-o p" data-me="p"><span class="av p">🧜‍♀️</span><span class="hrt-s p"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button></div><div class="dlg-act"><button type="button" id="me-cancel">Zavřít</button></div></div></dialog>
 <dialog id="prof-dlg" class="sheet" aria-labelledby="prof-t"><div class="sh-in">
  <div class="sh-top"><div class="sh-who" id="prof-who"></div><button type="button" class="sh-x" id="prof-x" aria-label="Zavřít">×</button></div>
  <div class="sh-tabs" role="tablist"><button type="button" role="tab" data-tab="likes" id="tab-likes">Srdíčka</button><button type="button" role="tab" data-tab="wish" id="tab-wish">Wishlist</button></div>
@@ -906,7 +915,7 @@ function buildDoc(){
 }
 function toast(msg,ms){ const t=$('toast'); t.textContent=msg; t.hidden=false; clearTimeout(t._h); if(ms!==0) t._h=setTimeout(()=>t.hidden=true, ms||3500); }
 async function save(){
-  if(LOCAL||!ART){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]}})); toast(SB?'Uloženo':'Uloženo jen v tomto zařízení'); return true; }catch(e){ toast('V tomto zařízení už není místo. Smažte pár fotek.'); return false; } }
+  if(LOCAL||!ART){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]},hidden:STATE.hidden||{}})); toast(SB?'Uloženo':'Uloženo jen v tomto zařízení'); return true; }catch(e){ toast('V tomto zařízení už není místo. Smažte pár fotek.'); return false; } }
   const html=buildDoc();
   if(html.length>15.5e6){ toast('Stránka je plná. Smažte pár fotek.'); return false; }
   saving=true; toast('Ukládám…',0);
@@ -923,7 +932,7 @@ function saveSoon(){ clearTimeout(saveTimer); saveTimer=setTimeout(save,1400); }
 async function initArt(){
   try{ if(window.claude && claude.use){ ART=await claude.use('artifact'); } }catch(e){ ART=null; }
   canEdit=true; LOCAL=!ART;
-  if(LOCAL){ try{ const ls=JSON.parse(localStorage.getItem('japan-state')||'null'); if(ls){ const ids=new Set(STATE.places.map(p=>p.id)); (ls.places||[]).forEach(p=>{ if(!ids.has(p.id)) STATE.places.push(p); }); const pids=new Set(STATE.photos.map(p=>p.id)); (ls.photos||[]).forEach(p=>{ if(!pids.has(p.id)) STATE.photos.push(p); }); Object.assign(STATE.checks, ls.checks||{}); STATE.likes=Object.assign({},STATE.likes||{},ls.likes||{}); if(ls.wish) STATE.wish=ls.wish; } }catch(e){} }
+  if(LOCAL){ try{ const ls=JSON.parse(localStorage.getItem('japan-state')||'null'); if(ls){ const ids=new Set(STATE.places.map(p=>p.id)); (ls.places||[]).forEach(p=>{ if(!ids.has(p.id)) STATE.places.push(p); }); const pids=new Set(STATE.photos.map(p=>p.id)); (ls.photos||[]).forEach(p=>{ if(!pids.has(p.id)) STATE.photos.push(p); }); Object.assign(STATE.checks, ls.checks||{}); STATE.likes=Object.assign({},STATE.likes||{},ls.likes||{}); if(ls.wish) STATE.wish=ls.wish; if(ls.hidden) STATE.hidden=ls.hidden; } }catch(e){} }
   renderPanel(cur); questProgress();
 }
 
@@ -955,13 +964,16 @@ function tlKey(x,i,r){ return x.own? 'own:'+x.own : (r&&r.ref? 'spot:'+r.city+'|
 function tlLinks(x,i){ let r=null; if(x.own){ const pl=STATE.places.find(p=>p.id===x.own); r={q:x.title+(pl&&pl.city?' '+CITY_EN[pl.city]:' Japan')}; } else r=refQuery(x.ref,i); if(!r) return '';
   const hk=(r.ref? 'spot:'+r.city+'|'+r.ref : (x.own?'own:'+x.own:null));
   return (hk?'<span class="li-h" data-hk="'+esc(hk)+'">'+heartsHTML(hk)+'</span>':'')+itemPhotos(tlKey(x,i,r))+'<div class="tl-links"><a class="chipl photo" href="'+gq(r.q)+'" target="_blank" rel="noopener">📷 Fotky na Googlu</a>'+(r.ref?'<button type="button" class="chipl" data-spot="'+r.city+'|'+r.ref+'">📍 Na mapě</button>':'<a class="chipl" href="'+gmap(r.q)+'" target="_blank" rel="noopener">📍 Google Maps</a>')+'</div>'; }
+let showHidden=false;
 function timelineSec(i){
-  const base=TL[i].map((t,k)=>({time:t[0],emoji:t[1],title:t[2],note:t[3]||'',ref:TLREF[i+'-'+k],ok:k}));
-  const own=STATE.places.filter(p=>p.day===i && p.time).map(p=>({time:p.time,emoji:p.emoji,title:p.name,note:p.note||'',own:p.id}));
+  const H=STATE.hidden||{}; const nHid=TL[i].filter((t,k)=>H['tl:'+i+'-'+k]).length;
+  const base=TL[i].map((t,k)=>({time:t[0],emoji:t[1],title:t[2],note:t[3]||'',ref:TLREF[i+'-'+k],ok:k,hid:!!H['tl:'+i+'-'+k]})).filter(x=>!x.hid||showHidden);
+  const own=STATE.places.filter(p=>p.day===i && p.time).map(p=>({time:p.time,emoji:p.emoji,title:p.name,note:p.note||'',own:p.id,who:p.who}));
   const all=base.concat(own).map((x,k)=>Object.assign(x,{k})).sort((a,b)=>mins(a.time)-mins(b.time)||a.k-b.k);
   let h='<div class="sec"><h3>Den po hodinách</h3><ol class="tl">';
-  all.forEach(x=>{ h+='<li class="'+(x.own?'own':'')+'"><time>'+esc(x.time)+'</time><span class="dot" aria-hidden="true"></span><div class="tl-c"><span class="em" aria-hidden="true">'+x.emoji+'</span><div><p>'+esc(x.title)+'</p>'+(x.note?'<small>'+esc(x.note)+'</small>':'')+tlLinks(x,i)+(x.own&&canEdit?'<button type="button" class="del" data-del="'+x.own+'" aria-label="Smazat">×</button>':'')+'</div></div></li>'; });
-  h+='</ol>'+(canEdit?'<button type="button" class="addbtn" data-add="1">＋ Přidat bod do dne</button>':'')+'</div>';
+  all.forEach(x=>{ const acts= !canEdit? '' : x.own? '<div class="tl-acts"><button type="button" class="act" data-edit="'+x.own+'">✎ Upravit</button><button type="button" class="del" data-del="'+x.own+'" aria-label="Smazat">×</button></div>' : '<div class="tl-acts"><button type="button" class="act" data-hide="tl:'+i+'-'+x.ok+'">'+(x.hid?'↺ Vrátit do plánu':'Vyřadit z plánu')+'</button></div>';
+    h+='<li class="'+(x.own?'own':'')+(x.hid?' hid':'')+'"><time>'+esc(x.time)+'</time><span class="dot" aria-hidden="true"></span><div class="tl-c"><span class="em" aria-hidden="true">'+x.emoji+'</span><div><p>'+esc(x.title)+(x.own&&x.who&&AV[x.who]?' <span class="by" title="Přidala">'+AV[x.who]+'</span>':'')+'</p>'+(x.note?'<small>'+esc(x.note)+'</small>':'')+tlLinks(x,i)+acts+'</div></div></li>'; });
+  h+='</ol>'+(nHid?'<button type="button" class="act showhid" data-showhid="1">'+(showHidden?'Skrýt vyřazené':'Ukázat vyřazené ('+nHid+')')+'</button>':'')+(canEdit?'<button type="button" class="addbtn" data-add="1">＋ Přidat bod do dne</button>':'')+'</div>';
   return h;
 }
 function spotLi(s,own,city,ref){ const q=s[1]+' '+(CITY_EN[city]||'Japan'); const hk=own?'own:'+own.id:'spot:'+city+'|'+ref; return '<li'+(own?' class="own"':'')+'><span class="em" aria-hidden="true">'+s[0]+'</span><div><span class="li-h" data-hk="'+esc(hk)+'">'+heartsHTML(hk)+'</span><p>'+esc(s[1])+(own&&own.time?' <em>'+esc(DAYS[own.day]?DAYS[own.day].d:'')+' '+esc(own.time)+'</em>':'')+'</p>'+(s[2]?'<small>'+esc(s[2])+'</small>':'')+itemPhotos(own?'own:'+own.id:'spot:'+city+'|'+ref)+'<div class="tl-links"><a class="chipl photo" href="'+gq(q)+'" target="_blank" rel="noopener">📷 Fotky na Googlu</a>'+(ref?'<button type="button" class="chipl" data-spot="'+city+'|'+ref+'">📍 Na mapě</button>':'')+'</div></div>'+(own&&canEdit?'<button type="button" class="del" data-del="'+own.id+'" aria-label="Smazat">×</button>':'')+'</li>'; }
@@ -1016,10 +1028,13 @@ function renderPanel(i){
 // delegated panel events
 $('pbody').addEventListener('change',e=>{ const q=e.target.dataset&&e.target.dataset.q; if(q) setCheck(q,e.target.checked); });
 $('pbody').addEventListener('click',e=>{
-  const t=e.target.closest('[data-del],[data-add],[data-ph],[data-go],[data-spot],[data-addph]'); if(!t) return;
+  const t=e.target.closest('[data-del],[data-add],[data-ph],[data-go],[data-spot],[data-addph],[data-edit],[data-hide],[data-showhid]'); if(!t) return;
+  if(t.dataset.edit){ openAdd('',t.dataset.edit); return; }
+  if(t.dataset.showhid){ showHidden=!showHidden; renderPanel(cur); return; }
+  if(t.dataset.hide){ const k=t.dataset.hide; STATE.hidden=STATE.hidden||{}; const on=!STATE.hidden[k]; if(on) STATE.hidden[k]=true; else delete STATE.hidden[k]; renderPanel(cur); if(SB&&SB_PLACES){ sbWrite(on? SB.from('hidden').upsert({k},{ignoreDuplicates:true}) : SB.from('hidden').delete().eq('k',k)); cacheLocal(); } else save(); return; }
   if(t.dataset.addph){ pendingItem=t.dataset.addph; $('ph-in').click(); return; }
   if(t.dataset.spot){ const [c,r]=t.dataset.spot.split('|'); flyToSpot(c,r); return; }
-  if(t.dataset.del){ if(t.dataset.armed){ STATE.places=STATE.places.filter(p=>p.id!==t.dataset.del); renderPanel(cur); save(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='×'; t.classList.remove('armed'); } },3000); } return; }
+  if(t.dataset.del){ if(t.dataset.armed){ const pid=t.dataset.del; STATE.places=STATE.places.filter(p=>p.id!==pid); renderPanel(cur); if(SB&&SB_PLACES){ sbWrite(SB.from('places').delete().eq('id',pid)); cacheLocal(); } else save(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='×'; t.classList.remove('armed'); } },3000); } return; }
   if(t.dataset.add){ openAdd(t.dataset.dist||''); return; }
   if(t.dataset.ph){ openPhoto(t.dataset.ph); return; }
   if(t.dataset.go){ e.preventDefault(); focusDistrict(CITY_OF[cur],t.dataset.go); }
@@ -1029,11 +1044,14 @@ $('pbody').addEventListener('keydown',e=>{ if((e.key==='Enter'||e.key===' ') && 
 /* ---------------- ADD PLACE DIALOG ---------------- */
 (function(){ const box=$('f-cats'); box.innerHTML=CATS.map((c,k)=>'<label class="cat"><input type="radio" name="f-cat" id="f-cat-'+k+'" value="'+c[0]+'"'+(k===0?' checked':'')+'><span>'+c[0]+'</span><small>'+c[1]+'</small></label>').join('');
   $('f-day').innerHTML='<option value="">Kdykoli</option>'+DAYS.map((d,k)=>'<option value="'+k+'">'+d.dow+' '+d.d+' · '+esc(d.title)+'</option>').join(''); })();
-function openAdd(dist){
+let editId=null;
+function openAdd(dist,eid){ editId=eid||null; const ep=editId&&STATE.places.find(p=>p.id===editId); if(ep&&ep.district) dist=ep.district;
   const city=CITY_OF[cur]; const sel=$('f-dist'), wrap=$('f-dist-wrap');
   if(city){ wrap.hidden=false; sel.innerHTML='<option value="">Jinde v '+(city==='tokyo'?'Tokiu':city==='kyoto'?'Kjótu':'Ósace')+'</option>'+CITIES_D[city].d.map(d=>'<option value="'+d.id+'">'+esc(d.name)+'</option>').join(''); sel.value=dist||''; } else { wrap.hidden=true; sel.innerHTML=''; }
-  $('f-name').value=''; $('f-note').value=''; $('f-time').value=''; $('f-day').value=String(cur);
-  $('add-title').textContent=dist? 'Nové místo · '+CITIES_D[city].d.find(d=>d.id===dist).name : 'Nové místo';
+  $('f-name').value=ep?ep.name:''; $('f-note').value=ep?(ep.note||''):''; $('f-time').value=ep?(ep.time||''):''; $('f-day').value=ep? (ep.day==null?'':String(ep.day)) : String(cur);
+  if(ep){ const r=document.querySelector('input[name="f-cat"][value="'+ep.emoji+'"]'); if(r) r.checked=true; }
+  $('add-title').textContent=ep? 'Upravit místo' : dist? 'Nové místo · '+CITIES_D[city].d.find(d=>d.id===dist).name : 'Nové místo';
+  $('add-form').querySelector('.pri').textContent=ep?'Uložit':'Přidat';
   const dlg=$('add-dlg'); if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
   setTimeout(()=>$('f-name').focus(),50);
 }
@@ -1043,8 +1061,12 @@ $('add-form').addEventListener('submit',e=>{ e.preventDefault();
   const cat=(document.querySelector('input[name="f-cat"]:checked')||{}).value||'⭐';
   const day=$('f-day').value===''? null : +$('f-day').value;
   const city=CITY_OF[cur]||null; const district=city? ($('f-dist').value||'') : '';
-  STATE.places.push({id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), city, district, day, time:$('f-time').value||'', emoji:cat, name:name.slice(0,80), note:$('f-note').value.trim().slice(0,160)});
-  $('add-dlg').close(); renderPanel(cur); save(); });
+  const fields={city, district, day, time:$('f-time').value||'', emoji:cat, name:name.slice(0,80), note:$('f-note').value.trim().slice(0,160)};
+  let row;
+  if(editId){ row=STATE.places.find(p=>p.id===editId); if(row){ if(!row.city&&!fields.city){ fields.city=row.city; } Object.assign(row,fields); } }
+  else { row=Object.assign({id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), who:getMe()||null},fields); STATE.places.push(row); }
+  $('add-dlg').close(); renderPanel(cur);
+  if(row&&SB&&SB_PLACES){ sbWrite(SB.from('places').upsert({id:row.id,who:row.who||null,city:row.city,district:row.district,day:row.day,time:row.time,emoji:row.emoji,name:row.name,note:row.note})); cacheLocal(); } else save(); editId=null; });
 
 /* ---------------- PHOTOS ---------------- */
 function compress(file){ return new Promise((res,rej)=>{ const url=URL.createObjectURL(file); const img=new Image();
@@ -1270,7 +1292,7 @@ document.addEventListener('click',e=>{ const b=e.target.closest('[data-like]'); 
   toggleLike(key,me); rerenderHearts(); },true);
 function rerenderHearts(){ if($('prof-dlg').open) renderProfile(); const c=$('poicard'); if(!c.hidden&&c._renderH) c._renderH(); document.querySelectorAll('[data-hk]').forEach(el=>{ el.innerHTML=heartsHTML(el.dataset.hk); }); }
 function openMe(cb){ const d=$('me-dlg'); d._cb=cb; if(d.showModal) d.showModal(); else d.setAttribute('open',''); }
-const AV={b:'🧸',p:'🌚'};
+const AV={b:'🧸',p:'🧜‍♀️'};
 function updateMeBtn(){ const a=$('avatar'); if(a){ const m=getMe(); a.className=m?'av-btn '+m:'av-btn'; a.innerHTML=m? '<span>'+AV[m]+'</span>' : '<span class="q">?</span>'; } const b=$('mebtn'); if(!b) return; const me=getMe(); b.innerHTML=me? '<span class="hrt-s '+me+'">'+HEART+'</span>' : '<span class="hrt-s">'+HEART+'</span>'; b.setAttribute('aria-label', me? 'Profil: '+(me==='b'?'modrý':'fialový')+'. Změnit' : 'Vybrat profil'); }
 function showPoi(L,noFly){ const card=$('poicard'); const d=L.distId&&CITIES_D[L.city].d.find(x=>x.id===L.distId); const note=L.note||'';
   const q=L.name+' '+CITY_EN[L.city];
@@ -1295,24 +1317,30 @@ function updateCityLabels(w,h,dcam){ const boxes=[]; const hit=(x,y,bw,bh)=>{ fo
 
 
 /* ---------------- SHARED SYNC (Supabase) ---------------- */
-let SB=null, pullTimer=null;
-function cacheLocal(){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]}})); }catch(e){} }
+let SB=null, SB_PLACES=false, pullTimer=null;
+function cacheLocal(){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]},hidden:STATE.hidden||{}})); }catch(e){} }
 function setSync(st){ const a=$('avatar'); if(a) a.dataset.sync=st; }
 async function sbWrite(q){ try{ const r=await q; if(r&&r.error) throw r.error; setSync('on'); }catch(e){ setSync('off'); toast('Nepodařilo se uložit, zkontroluj připojení.'); schedulePull(); } }
-function refreshShared(){ refreshLikeBadges(); rerenderHearts(); renderPanel(cur); questProgress(); }
+function refreshShared(){ try{ refreshUserPins(); }catch(e){} refreshLikeBadges(); rerenderHearts(); renderPanel(cur); questProgress(); }
 async function pullAll(){ if(!SB) return;
   try{ const [l,w,c]=await Promise.all([SB.from('likes').select('key,who'),SB.from('wish').select('id,who,t,c,done,created_at').order('created_at'),SB.from('checks').select('k')]);
     if(l.error||w.error||c.error) throw (l.error||w.error||c.error);
     const likes={}; l.data.forEach(r=>{ (likes[r.key]=likes[r.key]||{})[r.who]=true; }); STATE.likes=likes;
     const wish={b:[],p:[]}; w.data.forEach(r=>{ if(wish[r.who]) wish[r.who].push({id:r.id,t:r.t,c:r.c,done:!!r.done}); }); STATE.wish=wish;
     const ch={}; c.data.forEach(r=>{ ch[r.k]=true; }); STATE.checks=ch;
+    try{ const [pl,hd]=await Promise.all([SB.from('places').select('id,who,city,district,day,time,emoji,name,note,created_at').order('created_at'),SB.from('hidden').select('k')]);
+      if(pl.error||hd.error) throw (pl.error||hd.error);
+      if(!SB_PLACES){ const ids=new Set(pl.data.map(r=>r.id)); const mine=(STATE.places||[]).filter(p=>!ids.has(p.id)); if(mine.length) SB.from('places').upsert(mine.map(p=>({id:p.id,who:p.who||getMe()||null,city:p.city,district:p.district||'',day:p.day,time:p.time||'',emoji:p.emoji,name:p.name,note:p.note||''}))).then(()=>{}); pl.data=pl.data.concat(mine); }
+      SB_PLACES=true; STATE.places=pl.data.map(r=>({id:r.id,who:r.who,city:r.city,district:r.district||'',day:r.day,time:r.time||'',emoji:r.emoji,name:r.name,note:r.note||''}));
+      const hh={}; hd.data.forEach(r=>{ hh[r.k]=true; }); STATE.hidden=hh;
+    }catch(e2){ SB_PLACES=false; }
     cacheLocal(); refreshShared(); setSync('on');
   }catch(e){ setSync('off'); } }
 function schedulePull(){ clearTimeout(pullTimer); pullTimer=setTimeout(pullAll,350); }
 function initSync(){ const C=window.JQ_CONFIG; if(!C||!C.url||!C.key||!window.supabase) return;
   try{ SB=supabase.createClient(C.url,C.key,{auth:{persistSession:false}}); }catch(e){ SB=null; return; }
   pullAll();
-  SB.channel('trip').on('postgres_changes',{event:'*',schema:'public',table:'likes'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'wish'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'checks'},schedulePull).subscribe();
+  SB.channel('trip').on('postgres_changes',{event:'*',schema:'public',table:'likes'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'wish'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'checks'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'places'},schedulePull).on('postgres_changes',{event:'*',schema:'public',table:'hidden'},schedulePull).subscribe();
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden) pullAll(); });
   addEventListener('online',pullAll); }
 
