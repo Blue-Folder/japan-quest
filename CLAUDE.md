@@ -4,10 +4,14 @@ Osobní PWA pro cestu po Japonsku (23. 10. – 4. 11. 2026) pro dvě osoby. Host
 z větve `main`, každý push se kamarádce po otevření appky sám načte (service worker `sw.js` je network-first).
 
 ## Plán (indexy dní 0–12)
-0 přílet, noc 9h Hamamatsuchō · 1–3 Pegasus Hotel Yanagibashi (3 je volitelně Ōshima) ·
+0 přílet, noc 9h Hamamatsuchō · 1–3 Pegasus Hotel Yanagibashi (Ōshima vypadla, 3 = Jimbōchō/zahrady/teamLab) ·
 4–6 dvoudenní trek Nakasendō (Narai → Tsumago → Magome), noci 4 a 5 zatím bez ubytování ·
 6–8 Guesthouse Sign Kjóto · 9–11 Ósaka (zatím nezarezervováno) · 12 odlet.
 Data sdílená přes index dne (checks `i-j`, hidden `tl:i-k`, places.day) se po přeplánování mohou posunout.
+
+## Značky míst (5. prvek spotu v `CITIES_D`, 5. prvek řádku v `TL`)
+`m` = ❤️ ze seznamu (kamarádčin seznam míst), `x` = 🖤 z ruky / nevejde se, `s` = ⭐ doporučení. Funkce `marks()`, `spotF()`.
+Nové spoty přidávej jen na KONEC pole čtvrti – srdíčka (`likes`) jsou klíčovaná indexem spotu.
 
 ## Struktura
 - `index.html` – celá appka v jednom souboru (Three.js r128 z cdnjs, OrbitControls z jsDelivr).
