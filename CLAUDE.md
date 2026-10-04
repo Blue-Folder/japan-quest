@@ -5,8 +5,8 @@ z větve `main`, každý push se kamarádce po otevření appky sám načte (ser
 
 ## Plán (indexy dní 0–12)
 0 přílet, noc 9h Hamamatsuchō · 1–3 Pegasus Hotel Yanagibashi (Ōshima vypadla, 3 = Jimbōchō/zahrady/teamLab) ·
-4–6 dvoudenní trek Nakasendō (Narai → Tsumago → Magome), noci 4 a 5 zatím bez ubytování ·
-6–8 Guesthouse Sign Kjóto · 9–11 Ósaka (zatím nezarezervováno) · 12 odlet.
+4–6 trek Nakasendō: noc 4 yama-niwa-INN Narai, den 5 Narai→Yabuhara + vlak/bus do Magome, noc 5 Magome Furusato Gakkō, den 6 Magome→Tsumago→Kjóto ·
+6–8 Guesthouse Sign Kjóto (8 = Halloween, Kaikai YOKAI v Toei Uzumasa) · 9–11 Ósaka (zatím nezarezervováno) · 12 odlet.
 Data sdílená přes index dne (checks `i-j`, hidden `tl:i-k`, places.day) se po přeplánování mohou posunout.
 
 ## Značky míst (5. prvek spotu v `CITIES_D`, 5. prvek řádku v `TL`)
