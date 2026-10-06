@@ -4,7 +4,7 @@ Osobní PWA pro cestu po Japonsku (23. 10. – 4. 11. 2026) pro dvě osoby. Host
 z větve `main`, každý push se kamarádce po otevření appky sám načte (service worker `sw.js` je network-first).
 
 ## Plán (indexy dní 0–12)
-0 přílet, noc 9h Hamamatsuchō · 1–3 Pegasus Hotel Yanagibashi (Ōshima vypadla, 3 = Jimbōchō/zahrady/teamLab) ·
+0 přílet, noc 9h Hamamatsuchō · 1–3 Pegasus Hotel Yanagibashi (Ōshima vypadla, 3 = Jimbōchō, Jiyūgaoka, Nakameguro, teamLab) ·
 4–6 trek Nakasendō: noc 4 yama-niwa-INN Narai, den 5 Narai→Yabuhara + vlak/bus do Magome, noc 5 Magome Furusato Gakkō, den 6 Magome→Tsumago→Kjóto ·
 6–8 Guesthouse Sign Kjóto (8 = Halloween, Kaikai YOKAI v Toei Uzumasa) · 9–11 Ósaka (zatím nezarezervováno) · 12 odlet.
 Data sdílená přes index dne (checks `i-j`, hidden `tl:i-k`, places.day) se po přeplánování mohou posunout.
