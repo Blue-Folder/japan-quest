@@ -13,6 +13,11 @@ Data sdílená přes index dne (checks `i-j`, hidden `tl:i-k`, places.day) se po
 `m` = ❤️ ze seznamu (kamarádčin seznam míst), `x` = 🖤 z ruky / nevejde se, `s` = ⭐ doporučení. Funkce `marks()`, `spotF()`.
 Nové spoty přidávej jen na KONEC pole čtvrti – srdíčka (`likes`) jsou klíčovaná indexem spotu.
 
+## Vzhled
+Tmavý / světlý režim: přepínač v profilu (`#theme-t`, `applyTheme()`), uloženo v `localStorage['japan-theme']`.
+Barvy jdou přes proměnné v `:root` (`--tint`, `--panelrgb`, `--field`…), světlé hodnoty v `:root[data-theme="light"]`.
+Klepnutí na město nebo vesnici na mapě (`zoomPlace()`) otevře její den a přiblíží mapu.
+
 ## Struktura
 - `index.html` – celá appka v jednom souboru (Three.js r128 z cdnjs, OrbitControls z jsDelivr).
   - `DAYS` – 13 dní (datum, region, přesuny, tipy, co ověřit)

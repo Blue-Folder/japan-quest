@@ -1,5 +1,5 @@
 // Network-first: nová verze z GitHubu se ukáže hned, offline se použije poslední uložená.
-const CACHE = 'japan-v9';
+const CACHE = 'japan-v10';
 self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', e => {
