@@ -209,7 +209,7 @@ dialog::backdrop{background:rgba(5,10,20,.7)}
 .ph-bar span{flex:1;font-family:var(--mono);font-size:12px;color:var(--muted);text-align:center}
 .ph-bar button{appearance:none;border:1px solid var(--line);background:transparent;color:var(--paper);border-radius:10px;padding:8px 12px;font-family:var(--mono);font-size:12px;cursor:pointer}
 #ph-del[data-armed]{background:#b8402f;border-color:#b8402f}
-#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--paper);color:#10131a;font-weight:600;font-size:14px;padding:10px 16px;border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.4);z-index:50;max-width:calc(100% - 32px);text-align:center}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--paper);color:var(--ink);font-weight:600;font-size:14px;padding:10px 16px;border-radius:999px;box-shadow:0 8px 30px rgba(0,0,0,.4);z-index:50;max-width:calc(100% - 32px);text-align:center}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 
@@ -226,6 +226,12 @@ dialog::backdrop{background:rgba(5,10,20,.7)}
 .plab.sel i{transform:rotate(-45deg) scale(1.25)}
 .plab.home i{background:#1a73e8;color:#fff;font-weight:700}
 .plab.home span{display:block;color:#1a73e8}
+.plab.stay{z-index:4}
+.plab.stay i{width:30px;height:30px;line-height:30px;font-size:16px;background:#e5398d;border:2.5px solid #fff;box-shadow:0 0 0 4px rgba(229,57,141,.35),0 3px 8px rgba(0,0,0,.4);animation:stayPulse 2.4s ease-in-out infinite}
+.plab.stay span{display:block;color:#fff;background:#e5398d;text-shadow:none;border-radius:8px;padding:3px 8px;font-size:12px;line-height:1.2;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.plab.stay span small{display:block;font-weight:500;font-size:10.5px;opacity:.9}
+@keyframes stayPulse{0%,100%{box-shadow:0 0 0 4px rgba(229,57,141,.35),0 3px 8px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 9px rgba(229,57,141,.12),0 3px 8px rgba(0,0,0,.4)}}
+@media (prefers-reduced-motion: reduce){ .plab.stay i{animation:none} }
 .plab em{font-style:normal}
 .plab s.pm{position:absolute;left:-8px;top:-9px;text-decoration:none;font-size:11px;line-height:1;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
 .plab.far{filter:grayscale(.7)}.plab.far i{opacity:.6}
@@ -431,6 +437,10 @@ body.mapfull #chatbtn{display:none}
 .pl-day{margin:0 0 14px}
 .pl-day h4{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:500}
 .pl-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.pl-list li{display:flex;gap:4px;align-items:stretch}
+.pl-list li button{flex:1;min-width:0}
+.pl-ph{flex:none;width:44px;display:grid;place-items:center;border-radius:12px;background:rgba(var(--tint),.04);text-decoration:none;font-size:18px}
+.pl-ph:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .pl-list button{appearance:none;width:100%;display:grid;grid-template-columns:44px 30px 1fr;gap:8px;align-items:center;text-align:left;border:0;background:rgba(var(--tint),.04);color:var(--paper);border-radius:12px;padding:8px 10px;cursor:pointer;font:inherit}
 .pl-list time{font-family:var(--mono);font-size:12px;color:var(--muted)}
 .pl-list b{font-weight:600;font-size:14px}
@@ -594,7 +604,7 @@ const DAYS = [
 {d:'23. 10.', dow:'pá', reg:'tokyo', title:'Přílet do Tokia', jp:'東京', night:'Noc 1 · Akasaka 4-3-14', base:'akasaka', legs:['fly_in','hnd_hama'], weather:'Typicky 15–21 °C, tma kolem 17:00',
  tips:["První noc: Minato-ku, Akasaka 4-3-14. Nejbližší stanice Akasaka-mitsuke (linky Ginza a Marunouchi).", "Z Hanedy vlakem Keikyū do Shimbashi a odtud linkou Ginza do Akasaka-mitsuke, celkem asi 45 minut.", "Suica nebo PASMO si přidejte do telefonu, platí v metru i v konbini.", "Když se přílet zpozdí, Parlor Kimuraya vynechte a jděte rovnou do Yūrakuchō."],
  verify:["Suica / PASMO v telefonu", "Parlor Kimuraya: v pátek do 20:00, ověřit poslední objednávku"]},
-{d:'24. 10.', dow:'so', reg:'tokyo', title:'Stěhování do Asakusy', jp:'浅草', night:'Noc 1/3 · Pegasus Hotel, Yanagibashi', base:'tyo', legs:['hama_tyo'], weather:'Typicky 15–21 °C',
+{d:'24. 10.', dow:'so', reg:'tokyo', title:'Stěhování do Yanagibashi', jp:'柳橋', night:'Noc 1/3 · Pegasus Hotel, Yanagibashi', base:'tyo', legs:['hama_tyo'], weather:'Typicky 15–21 °C',
  tips:["Pegasus Hotel: Yanagibashi 1-3-2, pokoj 402, japonský pokoj s futony. Check-in od 15:00, check-out 27. 10. do 11:00. Nejbližší stanice Asakusabashi (JR Sōbu, linka Toei Asakusa).", "Den je nabitý, ale všechno je blízko u sebe. Když dojdou síly, vynechte Akihabaru, je stanici od hotelu.", "Zeptejte se hotelu, jestli vám vezmou zavazadla už v poledne."],
  verify:["Může Pegasus převzít zavazadla ráno kolem 8:00?"]},
 {d:'25. 10.', dow:'ne', reg:'tokyo', title:'Tokio naplno', jp:'東京', night:'Noc 2/3 · Pegasus Hotel, Yanagibashi', base:'tyo', legs:['tokyo_walk'], weather:'Typicky 15–21 °C',
@@ -664,7 +674,7 @@ const TLREF={"0-0": "q:Haneda Airport", "0-2": "q:Akasaka 4-3-14 Minato Tokyo", 
 const CITY_OF = {0:'tokyo',1:'tokyo',2:'tokyo',3:'tokyo',6:'kyoto',7:'kyoto',8:'kyoto',9:'osaka',10:'osaka',11:'osaka'};
 const CITIES_D = {
  tokyo:{name:'Tokio', base:[139.7855,35.6965], baseName:'Ubytování', d:[
-  {id:'asakusa', lab:'l', name:"Asakusa a Kuramae", jp:'浅草・蔵前', ll:[139.795, 35.708], days:[1], tags:["základna", "řemesla"], blurb:"Staré Tokio u řeky Sumida. Kuramae je tichá čtvrť dílen, papírnictví a kaváren.", spots:[
+  {id:'asakusa', lab:'l', name:"Asakusa a Kuramae", jp:'浅草・蔵前', ll:[139.795, 35.708], days:[1], tags:["staré Tokio", "řemesla"], blurb:"Staré Tokio u řeky Sumida. Kuramae je tichá čtvrť dílen, papírnictví a kaváren.", spots:[
    ["⛩️", "Sensō-ji", "Hlavní síň do 17:00, nádvoří nasvícené i večer", [139.7967, 35.7148], "m"],["🍢", "Hoppy Street", "Izakaye se stolky na ulici", [139.7935, 35.7128]],["🛍️", "Kappabashi", "Ulice kuchyňských nožů a plastového jídla", [139.7878, 35.7125]],["🎨", "Kakimori, Kuramae", "Zápisník svázaný na míru, plnicí pera", [139.7925, 35.7015]],["☕", "Dandelion Chocolate Kuramae", "", [139.7942, 35.7005]],["🌉", "Nábřeží Sumida", "Večer výhled na Tokyo Skytree", [139.7995, 35.7075], "m"],["🏮", "Kaminarimon", "Brána s obřím lampionem", [139.7963, 35.7111], "m"],["🛍️", "Nakamise-dōri", "Krámky se suvenýry a senbei, zavírají kolem 19:00", [139.7965, 35.7127], "m"],["⛩️", "Asakusa-jinja a Kannon-ura", "Svatyně za chrámem a klidné uličky staré Asakusy", [139.7978, 35.7152], "m"]]},
   {id:'yanaka', lab:'l', name:"Yanaka a Ueno", jp:'谷中・上野', ll:[139.77, 35.72], days:[1, 2], tags:["stará zástavba", "muzea"], blurb:"Čtvrť, kterou minula válka i developeři: dřevěné domy, chrámky, kočky. Kousek vedle muzea v parku Ueno.", spots:[
    ["☕", "Kayaba Coffee", "Kavárna z roku 1938, 8–18, v pondělí zavřeno", [139.7695, 35.72], "ms"],["🛍️", "Yanaka Ginza", "Krátká nákupní ulice se smaženými croquettes", [139.7662, 35.7275], "m"],["🌳", "Hřbitov Yanaka", "", [139.7705, 35.7235], "m"],["🎨", "SCAI The Bathhouse", "Současné umění v bývalých lázních", [139.7715, 35.7192]],["🏛️", "Tokyo National Museum", "Největší sbírka japonského umění", [139.7765, 35.7188]],["🏛️", "National Museum of Western Art", "Budova od Le Corbusiera, UNESCO", [139.7755, 35.7155]],["⛩️", "Nezu-jinja", "Tunel červených bran torii", [139.7605, 35.7202], "m"],["🚶", "Sendagi a Hebimichi", "Klikatá „hadí“ ulička mezi Yanakou a Nezu", [139.7662, 35.7238], "m"],["🛍️", "Ameyoko", "Trh pod tratí mezi Okachimachi a Ueno", [139.7745, 35.7105], "m"],["🌳", "Rikugien", "Krásná zahrada, ale je z ruky. Podzimní nasvícení až v listopadu", [139.7465, 35.733], "mx"]]},
@@ -1318,7 +1328,7 @@ function buildCity(city){
     const el=mkLabel('dlab','<b>'+esc(d.name)+'</b>'); el.addEventListener('click',()=>focusDistrict(city,d.id)); el.setAttribute('role','button');
     cityLabels.push({city,pos:c.clone().add(new THREE.Vector3(0,0,0.035)),el,kind:'dist',d});
     d.spots.forEach((s,k)=>{ if(s[3]) addPin(city,s[3],s[0],s[1],d.id,k,false,s[2],s[4]); }); });
-  const bp=W(C.base,0.003); cityLabels.push({city,pos:bp,el:mkLabel('plab home','<i><b>⌂</b></i><span>Ubytování</span>'),kind:'home'});
+  (STAYS[city]||[{ll:C.base,n:'Ubytování',d:''}]).forEach(st=>{ cityLabels.push({city,pos:W(st.ll,0.003),el:mkLabel('plab home stay','<i><b>🛏️</b></i><span>'+esc(st.n)+(st.d?'<small>'+esc(st.d)+'</small>':'')+'</span>'),kind:'home'}); });
 }
 function mkLabel(cls,html){ const el=document.createElement('div'); el.className=cls; el.innerHTML=html; el.style.opacity=0; labWrap.appendChild(el); return el; }
 const HEART='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg>';
@@ -1344,6 +1354,7 @@ function refreshUserPins(){
   STATE.places.forEach(pl=>{ if(!pl.city||!CT[pl.city]) return; const d=pl.district&&CITIES_D[pl.city].d.find(x=>x.id===pl.district);
     const center=d? d.ll : CT[pl.city].base; const a=hashN(pl.id)*6.283, r=0.0015+hashN(pl.id+'r')*0.002; const P2=addPin(pl.city,[center[0]+Math.cos(a)*r/CL, center[1]+Math.sin(a)*r],pl.emoji,pl.name,pl.district,null,true,pl.note); P2.pid=pl.id; }); refreshLikeBadges();
 }
+const STAYS={tokyo:[{ll:[139.735,35.674],n:'Akasaka',d:'noc 23. 10.'},{ll:[139.7855,35.6965],n:'Pegasus Hotel',d:'noci 24.–26. 10.'}],kyoto:[{ll:[135.768,35.0025],n:'Guesthouse Sign',d:'noci 29.–31. 10.'}],osaka:[{ll:[135.502,34.666],n:'Ubytování v Ósace',d:'zatím nevybrané'}]};
 ['tokyo','kyoto','osaka'].forEach(buildCity);
 // city route of the day
 let routeObj=null;
@@ -1380,7 +1391,7 @@ function showPoi(L,noFly){ const card=$('poicard'); const d=L.distId&&CITIES_D[L
 function updateCityLabels(w,h,dcam){ const boxes=[]; const hit=(x,y,bw,bh)=>{ for(const b of boxes){ if(x<b[0]+b[2]&&x+bw>b[0]&&y<b[1]+b[3]&&y+bh>b[1]) return true; } boxes.push([x,y,bw,bh]); return false; };
   const order=cityLabels.slice().sort((a,b)=>(b.el.classList.contains('sel')-a.el.classList.contains('sel'))||((a.kind==='dist')-(b.kind==='dist')));
   order.forEach(L=>{ let show=false;
-    if(L.kind==='pin') show=dcam<3.2; else if(L.kind==='dist') show=dcam<4.5; else if(L.kind==='mark') show=dcam<3; else if(L.kind==='home') show=dcam<4;
+    if(L.kind==='pin') show=dcam<3.2; else if(L.kind==='dist') show=dcam<4.5; else if(L.kind==='mark') show=dcam<3; else if(L.kind==='home') show=dcam<7;
     if(show){ tmp.copy(L.pos).project(camera); show=tmp.z<1&&tmp.x>-1.05&&tmp.x<1.05&&tmp.y>-1.05&&tmp.y<1.1; }
     L.el.style.opacity=show?1:0; L.el.style.pointerEvents=show?'auto':'none';
     if(!show) return;
@@ -1504,15 +1515,15 @@ function planGroupOf(i,ref){ if(ref&&!ref.startsWith('q:')) return CITY_OF[i]||D
   const r=DAYS[i].reg; return r==='kafka'?'osaka':r; }
 function planItems(){ const H=STATE.hidden||{}; const out=[];
   TL.forEach((rows,i)=>rows.forEach((t,k)=>{ const ref=TLREF[i+'-'+k]; if(!ref||H['tl:'+i+'-'+k]) return; if(/^(🚃|🚄|🚇|🚌|🚝|🚋|🚕|✈️|🛏️|🏨|🧳)$/.test(t[1])) return;
-    out.push({g:planGroupOf(i,ref),day:i,time:t[0],emoji:t[1],title:t[2],f:t[4]||spotF(CITY_OF[i]||CITY_DAYS[i],ref)}); }));
-  (STATE.places||[]).forEach(p=>{ if(p.day==null||!p.time) return; out.push({g:p.city||planGroupOf(p.day,null),day:p.day,time:p.time,emoji:p.emoji,title:p.name,f:'',own:true}); });
+    const rq=refQuery(ref,i); out.push({g:planGroupOf(i,ref),day:i,time:t[0],emoji:t[1],title:t[2],f:t[4]||spotF(CITY_OF[i]||CITY_DAYS[i],ref),q:rq?rq.q:t[2]+' Japan'}); }));
+  (STATE.places||[]).forEach(p=>{ if(p.day==null||!p.time) return; out.push({g:p.city||planGroupOf(p.day,null),day:p.day,time:p.time,emoji:p.emoji,title:p.name,f:'',own:true,q:p.name+' '+(CITY_EN[p.city]||'Japan')}); });
   return out.sort((a,b)=>a.day-b.day||mins(a.time)-mins(b.time)); }
 function planHTML(){ const items=planItems(); const groups=PLAN_GROUPS.filter(g=>items.some(x=>x.g===g[0]));
   if(!planCity||!groups.some(g=>g[0]===planCity)){ const cg=items.find(x=>x.day===cur); planCity=(cg&&cg.g)||(groups[0]&&groups[0][0]); }
   let h='<div class="pl-cities" role="group" aria-label="Města">'+groups.map(g=>'<button type="button" data-plan="'+g[0]+'" class="'+(g[0]===planCity?'on':'')+'" style="--c:'+(REG[g[0]]?REG[g[0]].c:'var(--gold)')+'">'+g[1]+' <small>'+items.filter(x=>x.g===g[0]).length+'</small></button>').join('')+'</div>';
   const list=items.filter(x=>x.g===planCity); h+='<p class="pl-sum">Všechna místa z plánu, den po dni. Klepnutím otevřete den.</p>';
   const byDay={}; list.forEach(x=>{ (byDay[x.day]=byDay[x.day]||[]).push(x); });
-  Object.keys(byDay).map(Number).sort((a,b)=>a-b).forEach(d=>{ const D=DAYS[d]; h+='<div class="pl-day"><h4>'+D.dow+' '+D.d+' · '+esc(D.title)+'</h4><ul class="pl-list">'+byDay[d].map(x=>'<li><button type="button" data-pday="'+d+'"><time>'+esc(x.time)+'</time><span class="em">'+x.emoji+'</span><b>'+esc(x.title)+marks(x.f)+'</b></button></li>').join('')+'</ul></div>'; });
+  Object.keys(byDay).map(Number).sort((a,b)=>a-b).forEach(d=>{ const D=DAYS[d]; h+='<div class="pl-day"><h4>'+D.dow+' '+D.d+' · '+esc(D.title)+'</h4><ul class="pl-list">'+byDay[d].map(x=>'<li><button type="button" data-pday="'+d+'"><time>'+esc(x.time)+'</time><span class="em">'+x.emoji+'</span><b>'+esc(x.title)+marks(x.f)+'</b></button><a class="pl-ph" href="'+gq(x.q)+'" target="_blank" rel="noopener" aria-label="Fotky: '+esc(x.title)+'">📷</a></li>').join('')+'</ul></div>'; });
   return h; }
 
 /* ---------------- RESIZE ---------------- */
