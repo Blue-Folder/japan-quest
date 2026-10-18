@@ -18,6 +18,13 @@ Tmavý / světlý režim: přepínač v profilu (`#theme-t`, `applyTheme()`), ul
 Barvy jdou přes proměnné v `:root` (`--tint`, `--panelrgb`, `--field`…), světlé hodnoty v `:root[data-theme="light"]`.
 Klepnutí na město nebo vesnici na mapě (`zoomPlace()`) otevře její den a přiblíží mapu.
 
+## Mapa, vzkazy, plán
+- `#mapx` / `setMapFull()`: mapa přes celou obrazovku bez trasy dne.
+- 💬 `#chatbtn` vlevo dole: „Vzkazy pro Clauda“ místo timeline (`#chatv`, `renderChat()`). Ukládá se do tabulky `wish`
+  s `c='claude'` (sdílí se bez další SQL). Claude Code se k Supabase odsud nedostane, proto tlačítko „Zkopírovat nevyřízené“.
+  Živý chat by potřeboval Anthropic API klíč a Supabase Edge Function (zatím neuděláno).
+- Profil → záložka „Plán“ (`planHTML()`): místa z TL po městech a dnech.
+
 ## Struktura
 - `index.html` – celá appka v jednom souboru (Three.js r128 z cdnjs, OrbitControls z jsDelivr).
   - `DAYS` – 13 dní (datum, region, přesuny, tipy, co ověřit)
