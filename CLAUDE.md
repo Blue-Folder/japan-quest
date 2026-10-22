@@ -4,7 +4,7 @@ Osobní PWA pro cestu po Japonsku (23. 10. – 4. 11. 2026) pro dvě osoby. Host
 z větve `main`, každý push se kamarádce po otevření appky sám načte (service worker `sw.js` je network-first).
 
 ## Plán (indexy dní 0–12)
-0 přílet + večerní Asakusa, noc Akasaka 4-3-14 · 1–3 Pegasus Hotel Yanagibashi (1 Koishikawa/Jimbōchō/palác/Shinjuku, 2 Tsukiji/Hamarikyu/Harajuku/Shibuya/Kill Bill, 3 Fudži) · 4 Kōenji, Kichijōji, Azusa z Tachikawy do Narai ·
+0 přílet + večerní Asakusa, noc Akasaka 4-3-14 · 1–3 Pegasus Hotel Yanagibashi (1 Koishikawa/Jimbōchō/palác/Shinjuku, 2 Tsukiji/Hamarikyu/Harajuku/Shibuya/Kill Bill, 3 Kappabashi/Kichijōji/Kōenji/Nishi-Ogikubo) · 4 Fudži cestou: Kawaguchiko → Shimoyoshida → Ōtsuki → Azusa → Narai ·
 4–6 trek Nakasendō: noc 4 yama-niwa-INN Narai, den 5 Narai→Yabuhara + vlak/bus do Magome, noc 5 Magome Furusato Gakkō, den 6 Magome→Tsumago→Nagiso pěšky→Kjóto ·
 6–8 Guesthouse Sign Kjóto (8 = Halloween, Kaikai YOKAI v Toei Uzumasa) · 9–11 Ósaka (zatím nezarezervováno) · 12 odlet.
 Data sdílená přes index dne (checks `i-j`, hidden `tl:i-k`, places.day) se po přeplánování mohou posunout.
