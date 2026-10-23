@@ -395,6 +395,7 @@ ol.tl li.hid p{text-decoration:line-through}
 }
 .theme-t{appearance:none;margin-left:auto;border:1px solid var(--line);background:rgba(var(--tint),.05);color:var(--paper);border-radius:999px;padding:6px 12px;font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
 .theme-t:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.chip.today{box-shadow:0 0 0 2px var(--gold)}
 .ver-l{margin:-4px 16px 6px;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
 
 /* mapa přes celou obrazovku */
@@ -523,7 +524,7 @@ body.mapfull #chatbtn{display:none}
 <dialog id="me-dlg" aria-labelledby="me-t"><div class="dlg-in"><h2 id="me-t">Kdo jsi?</h2><p class="hint" style="margin:0">Telefon si tvůj profil zapamatuje. Označuješ pak svým srdíčkem a máš svůj wishlist.</p><div class="me-pick"><button type="button" class="me-o b" data-me="b"><span class="av b">🧸</span><span class="hrt-s b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button><button type="button" class="me-o p" data-me="p"><span class="av p">🧜‍♀️</span><span class="hrt-s p"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button></div><div class="dlg-act"><button type="button" id="me-cancel">Zavřít</button></div></div></dialog>
 <dialog id="prof-dlg" class="sheet" aria-labelledby="prof-t"><div class="sh-in">
  <div class="sh-top"><div class="sh-who" id="prof-who"></div><button type="button" class="theme-t" id="theme-t" aria-pressed="false">☀️ Světlý režim</button><button type="button" class="sh-x" id="prof-x" aria-label="Zavřít">×</button></div>
- <p class="ver-l" id="ver-l">verze 17</p>
+ <p class="ver-l" id="ver-l">verze 18</p>
  <div class="sh-tabs" role="tablist"><button type="button" role="tab" data-tab="likes" id="tab-likes">Srdíčka</button><button type="button" role="tab" data-tab="wish" id="tab-wish">Wishlist</button><button type="button" role="tab" data-tab="plan" id="tab-plan">Plán</button></div>
  <div class="sh-body" id="prof-body"></div>
 </div></dialog>
@@ -1621,6 +1622,11 @@ questProgress();
 let start=0, fromSave=false; try{ fromSave=sessionStorage.getItem('japan-saved')==='1'; sessionStorage.removeItem('japan-saved'); }catch(e){}
 try{ const ls=parseInt(localStorage.getItem('japan-day'),10); if(ls>=0&&ls<13) start=ls; }catch(e){}
 const m=/^#den(\d+)$/.exec(location.hash||''); if(m && !fromSave) start=Math.max(0,Math.min(12,parseInt(m[1],10)-1));
+function todayIdx(){ try{ const t=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo'}).format(new Date()).split('-').map(Number); const i=Math.round((Date.UTC(t[0],t[1]-1,t[2])-Date.UTC(2026,9,23))/864e5); return i>=0&&i<DAYS.length? i : -1; }catch(e){ return -1; } }
+let lastToday=todayIdx(); if(lastToday>=0 && !fromSave) start=lastToday;
+function markToday(){ document.querySelectorAll('.chip').forEach((b,k)=>b.classList.toggle('today',k===lastToday)); }
+markToday();
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) return; const t=todayIdx(); if(t>=0 && t!==lastToday){ lastToday=t; markToday(); go(t,{dur:1200}); } });
 go(start, fromSave? {dur:0, delay:0} : {dur:2600, delay:1200});
 initArt();
 initSync();
@@ -1629,7 +1635,7 @@ try{ const sh=sessionStorage.getItem('japan-sheet'); if(sh&&getMe()) setTimeout(
 </script>
 
 <script>
-const APP_VER='17';
+const APP_VER='18';
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{})); }
 /* kontrola nové verze: iPhone appku z plochy jen „probudí“, nenačte znovu */
 let hiddenAt=0, verBusy=false;
