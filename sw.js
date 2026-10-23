@@ -1,5 +1,5 @@
 // Offline-first pro jádro appky, síť s časovým limitem pro aktualizace.
-const CACHE = 'japan-v19';
+const CACHE = 'japan-v20';
 const CORE = ['./', 'index.html', 'config.js', 'manifest.webmanifest',
   'vendor/supabase-2.117.2.js', 'vendor/three-r128.min.js', 'vendor/OrbitControls-r128.js',
   'icons/icon-192.png', 'icons/apple-touch-icon.png'];
