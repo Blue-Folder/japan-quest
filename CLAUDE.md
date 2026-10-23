@@ -56,6 +56,7 @@ Aktuální profil je v `localStorage['japan-me']`.
 4. Rozdělit `index.html` na moduly, až to bude potřeba.
 
 ## Pravidla
+- Při každém vydání zvyš `APP_VER` v index.html i `CACHE` v sw.js. Appka po návratu z pozadí porovná verzi a sama se obnoví.
 - Texty v appce česky, bez jmen (profily jen emoji a barvy).
 - Mobil je hlavní zařízení; testuj šířku ~400 px a iPhone safe-area.
 - Polohy míst jsou zadané ručně, ověřuj je.
