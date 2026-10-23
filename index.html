@@ -523,7 +523,7 @@ body.mapfull #chatbtn{display:none}
 <dialog id="me-dlg" aria-labelledby="me-t"><div class="dlg-in"><h2 id="me-t">Kdo jsi?</h2><p class="hint" style="margin:0">Telefon si tvůj profil zapamatuje. Označuješ pak svým srdíčkem a máš svůj wishlist.</p><div class="me-pick"><button type="button" class="me-o b" data-me="b"><span class="av b">🧸</span><span class="hrt-s b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button><button type="button" class="me-o p" data-me="p"><span class="av p">🧜‍♀️</span><span class="hrt-s p"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button></div><div class="dlg-act"><button type="button" id="me-cancel">Zavřít</button></div></div></dialog>
 <dialog id="prof-dlg" class="sheet" aria-labelledby="prof-t"><div class="sh-in">
  <div class="sh-top"><div class="sh-who" id="prof-who"></div><button type="button" class="theme-t" id="theme-t" aria-pressed="false">☀️ Světlý režim</button><button type="button" class="sh-x" id="prof-x" aria-label="Zavřít">×</button></div>
- <p class="ver-l" id="ver-l"></p>
+ <p class="ver-l" id="ver-l">verze 17</p>
  <div class="sh-tabs" role="tablist"><button type="button" role="tab" data-tab="likes" id="tab-likes">Srdíčka</button><button type="button" role="tab" data-tab="wish" id="tab-wish">Wishlist</button><button type="button" role="tab" data-tab="plan" id="tab-plan">Plán</button></div>
  <div class="sh-body" id="prof-body"></div>
 </div></dialog>
@@ -1629,18 +1629,18 @@ try{ const sh=sessionStorage.getItem('japan-sheet'); if(sh&&getMe()) setTimeout(
 </script>
 
 <script>
-const APP_VER='16';
+const APP_VER='17';
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{})); }
 /* kontrola nové verze: iPhone appku z plochy jen „probudí“, nenačte znovu */
 let hiddenAt=0, verBusy=false;
 async function checkVersion(){ if(verBusy||!navigator.onLine) return; verBusy=true;
   try{ const r=await fetch('index.html?v='+Date.now(),{cache:'no-store'}); const t=await r.text(); const m=/const APP_VER='(\d+)'/.exec(t);
     if(m&&m[1]!==APP_VER){ const busy=document.querySelector('dialog[open]')||(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName));
-      if(busy) toast('Je nová verze appky, zavřete ji a otevřete znovu'); else location.reload(); } }catch(e){}
+      if(busy){ const t=document.getElementById('toast'); if(t){ t.textContent='Je nová verze appky, zavřete ji a otevřete znovu'; t.hidden=false; } } else location.reload(); } }catch(e){}
   verBusy=false; }
 document.addEventListener('visibilitychange',()=>{ if(document.hidden){ hiddenAt=Date.now(); } else if(Date.now()-hiddenAt>60000){ checkVersion(); } });
 setTimeout(checkVersion,4000);
-try{ $('ver-l').textContent='verze '+APP_VER; }catch(e){}
+try{ document.getElementById('ver-l').textContent='verze '+APP_VER; }catch(e){}
 </script>
 </body>
 </html>
