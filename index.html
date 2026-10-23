@@ -524,7 +524,7 @@ body.mapfull #chatbtn{display:none}
 <dialog id="me-dlg" aria-labelledby="me-t"><div class="dlg-in"><h2 id="me-t">Kdo jsi?</h2><p class="hint" style="margin:0">Telefon si tvůj profil zapamatuje. Označuješ pak svým srdíčkem a máš svůj wishlist.</p><div class="me-pick"><button type="button" class="me-o b" data-me="b"><span class="av b">🧸</span><span class="hrt-s b"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button><button type="button" class="me-o p" data-me="p"><span class="av p">🧜‍♀️</span><span class="hrt-s p"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.3 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.3 2.4.7-1.2 2.2-2.4 4.3-2.4 3.7 0 5.8 3.8 4.3 7.2C19.5 16.4 12 21 12 21z"/></svg></span></button></div><div class="dlg-act"><button type="button" id="me-cancel">Zavřít</button></div></div></dialog>
 <dialog id="prof-dlg" class="sheet" aria-labelledby="prof-t"><div class="sh-in">
  <div class="sh-top"><div class="sh-who" id="prof-who"></div><button type="button" class="theme-t" id="theme-t" aria-pressed="false">☀️ Světlý režim</button><button type="button" class="sh-x" id="prof-x" aria-label="Zavřít">×</button></div>
- <p class="ver-l" id="ver-l">verze 18</p>
+ <p class="ver-l" id="ver-l">verze 19</p>
  <div class="sh-tabs" role="tablist"><button type="button" role="tab" data-tab="likes" id="tab-likes">Srdíčka</button><button type="button" role="tab" data-tab="wish" id="tab-wish">Wishlist</button><button type="button" role="tab" data-tab="plan" id="tab-plan">Plán</button></div>
  <div class="sh-body" id="prof-body"></div>
 </div></dialog>
@@ -536,8 +536,8 @@ body.mapfull #chatbtn{display:none}
 
 <script src="vendor/supabase-2.117.2.js"></script>
 <script src="config.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="vendor/three-r128.min.js"></script>
+<script src="vendor/OrbitControls-r128.js"></script>
 <script>
 (function(){
 // kanji font, subset to the glyphs used
@@ -1023,7 +1023,7 @@ async function initArt(){
 function isChecked(k){ return !!(STATE.checks[k] || localChecks[k]); }
 function questProgress(){ let t=0,d=0; DAYS.forEach((day,i)=>day.verify.forEach((v,j)=>{ t++; if(isChecked(i+'-'+j)) d++; })); $('qfill').style.width=(t? d/t*100:0)+'%'; $('qtext').textContent=d+'/'+t; }
 function setCheck(k,v){
-  if(canEdit){ if(v) STATE.checks[k]=true; else { delete STATE.checks[k]; } delete localChecks[k]; if(SB) sbWrite(v? SB.from('checks').upsert({k},{ignoreDuplicates:true}) : SB.from('checks').delete().eq('k',k)); saveSoon(); }
+  if(canEdit){ if(v) STATE.checks[k]=true; else { delete STATE.checks[k]; } delete localChecks[k]; if(SB) sbWrite(v? SBQ('checks').upsert({k},{ignoreDuplicates:true}) : SBQ('checks').delete().eq('k',k)); saveSoon(); }
   else { if(v) localChecks[k]=true; else delete localChecks[k]; }
   try{ localStorage.setItem('japan-quests',JSON.stringify(localChecks)); }catch(e){}
   questProgress();
@@ -1118,10 +1118,10 @@ $('pbody').addEventListener('click',e=>{
   const t=e.target.closest('[data-del],[data-add],[data-ph],[data-go],[data-spot],[data-addph],[data-edit],[data-hide],[data-showhid]'); if(!t) return;
   if(t.dataset.edit){ openAdd('',t.dataset.edit); return; }
   if(t.dataset.showhid){ showHidden=!showHidden; renderPanel(cur); return; }
-  if(t.dataset.hide){ const k=t.dataset.hide; STATE.hidden=STATE.hidden||{}; const on=!STATE.hidden[k]; if(on) STATE.hidden[k]=true; else delete STATE.hidden[k]; renderPanel(cur); if(SB&&SB_PLACES){ sbWrite(on? SB.from('hidden').upsert({k},{ignoreDuplicates:true}) : SB.from('hidden').delete().eq('k',k)); cacheLocal(); } else save(); return; }
+  if(t.dataset.hide){ const k=t.dataset.hide; STATE.hidden=STATE.hidden||{}; const on=!STATE.hidden[k]; if(on) STATE.hidden[k]=true; else delete STATE.hidden[k]; renderPanel(cur); if(SB&&SB_PLACES){ sbWrite(on? SBQ('hidden').upsert({k},{ignoreDuplicates:true}) : SBQ('hidden').delete().eq('k',k)); cacheLocal(); } else save(); return; }
   if(t.dataset.addph){ pendingItem=t.dataset.addph; $('ph-in').click(); return; }
   if(t.dataset.spot){ const [c,r]=t.dataset.spot.split('|'); flyToSpot(c,r); return; }
-  if(t.dataset.del){ if(t.dataset.armed){ const pid=t.dataset.del; STATE.places=STATE.places.filter(p=>p.id!==pid); renderPanel(cur); if(SB&&SB_PLACES){ sbWrite(SB.from('places').delete().eq('id',pid)); cacheLocal(); } else save(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='×'; t.classList.remove('armed'); } },3000); } return; }
+  if(t.dataset.del){ if(t.dataset.armed){ const pid=t.dataset.del; STATE.places=STATE.places.filter(p=>p.id!==pid); renderPanel(cur); if(SB&&SB_PLACES){ sbWrite(SBQ('places').delete().eq('id',pid)); cacheLocal(); } else save(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); setTimeout(()=>{ if(t.isConnected){ delete t.dataset.armed; t.textContent='×'; t.classList.remove('armed'); } },3000); } return; }
   if(t.dataset.add){ openAdd(t.dataset.dist||''); return; }
   if(t.dataset.ph){ openPhoto(t.dataset.ph); return; }
   if(t.dataset.go){ e.preventDefault(); focusDistrict(CITY_OF[cur],t.dataset.go); }
@@ -1153,7 +1153,7 @@ $('add-form').addEventListener('submit',e=>{ e.preventDefault();
   if(editId){ row=STATE.places.find(p=>p.id===editId); if(row){ if(!row.city&&!fields.city){ fields.city=row.city; } Object.assign(row,fields); } }
   else { row=Object.assign({id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), who:getMe()||null},fields); STATE.places.push(row); }
   $('add-dlg').close(); renderPanel(cur);
-  if(row&&SB&&SB_PLACES){ sbWrite(SB.from('places').upsert({id:row.id,who:row.who||null,city:row.city,district:row.district,day:row.day,time:row.time,emoji:row.emoji,name:row.name,note:row.note})); cacheLocal(); } else save(); editId=null; });
+  if(row&&SB&&SB_PLACES){ sbWrite(SBQ('places').upsert({id:row.id,who:row.who||null,city:row.city,district:row.district,day:row.day,time:row.time,emoji:row.emoji,name:row.name,note:row.note})); cacheLocal(); } else save(); editId=null; });
 
 /* ---------------- PHOTOS ---------------- */
 function compress(file){ return new Promise((res,rej)=>{ const url=URL.createObjectURL(file); const img=new Image();
@@ -1340,7 +1340,7 @@ function setMe(v){ try{ localStorage.setItem('japan-me',v); }catch(e){} updateMe
 function likeKey(L){ return L.own? 'own:'+L.pid : 'spot:'+L.city+'|'+L.distId+':'+L.k; }
 function likesOf(key){ return (STATE.likes&&STATE.likes[key])||{}; }
 function likeCls(key){ const l=likesOf(key); return l.b&&l.p?'lk-both':l.b?'lk-b':l.p?'lk-p':''; }
-function toggleLike(key,who){ STATE.likes=STATE.likes||{}; const l=Object.assign({},STATE.likes[key]||{}); if(l[who]) delete l[who]; else l[who]=true; if(l.b||l.p) STATE.likes[key]=l; else delete STATE.likes[key]; refreshLikeBadges(); if(SB){ sbWrite(l[who]? SB.from('likes').upsert({key,who},{ignoreDuplicates:true}) : SB.from('likes').delete().eq('key',key).eq('who',who)); cacheLocal(); } else saveSoon(); }
+function toggleLike(key,who){ STATE.likes=STATE.likes||{}; const l=Object.assign({},STATE.likes[key]||{}); if(l[who]) delete l[who]; else l[who]=true; if(l.b||l.p) STATE.likes[key]=l; else delete STATE.likes[key]; refreshLikeBadges(); if(SB){ sbWrite(l[who]? SBQ('likes').upsert({key,who},{ignoreDuplicates:true}) : SBQ('likes').delete().eq('key',key).eq('who',who)); cacheLocal(); } else saveSoon(); }
 function refreshLikeBadges(){ cityLabels.forEach(L=>{ if(L.kind!=='pin') return; const c=likeCls(likeKey(L)); L.el.classList.remove('lk-b','lk-p','lk-both'); if(c) L.el.classList.add(c); }); }
 function heartsHTML(key){ const l=likesOf(key), me=getMe(); if(l.b&&l.p) return '<div class="hearts both"><button type="button" class="hrt wine on" data-like="'+esc(key)+'" aria-label="Obě chceme">'+HEART+'</button></div>';
   return '<div class="hearts">'+['b','p'].map(w=>'<button type="button" class="hrt '+w+(l[w]?' on':'')+(me&&me!==w?' other':'')+'" data-like="'+esc(key)+'" data-who="'+w+'" aria-pressed="'+(!!l[w])+'" aria-label="'+(w==='b'?'Modré srdíčko':'Fialové srdíčko')+'">'+HEART+'</button>').join('')+'</div>'; }
@@ -1408,9 +1408,22 @@ function updateCityLabels(w,h,dcam){ const boxes=[]; const hit=(x,y,bw,bh)=>{ fo
 let SB=null, SB_PLACES=false, pullTimer=null;
 function cacheLocal(){ try{ localStorage.setItem('japan-state',JSON.stringify({places:STATE.places,photos:STATE.photos,checks:STATE.checks,likes:STATE.likes||{},wish:STATE.wish||{b:[],p:[]},hidden:STATE.hidden||{},chat:STATE.chat||[]})); }catch(e){} }
 function setSync(st){ const a=$('avatar'); if(a) a.dataset.sync=st; }
-async function sbWrite(q){ try{ const r=await q; if(r&&r.error) throw r.error; setSync('on'); }catch(e){ setSync('off'); toast('Nepodařilo se uložit, zkontroluj připojení.'); schedulePull(); } }
+const OUTBOX_KEY='japan-outbox';
+function SBQ(t){ const r={t,steps:[]}; ['insert','update','upsert','delete','eq','match'].forEach(f=>{ r[f]=(...a)=>{ r.steps.push([f,a]); return r; }; }); return r; }
+function sbRun(op){ let q=SB.from(op.t); op.steps.forEach(([f,a])=>{ q=q[f](...a); }); return q; }
+function obGet(){ try{ return JSON.parse(localStorage.getItem(OUTBOX_KEY)||'[]'); }catch(e){ return []; } }
+function obSet(a){ try{ localStorage.setItem(OUTBOX_KEY,JSON.stringify(a)); }catch(e){} }
+function obPush(op){ obSet(obGet().concat([{t:op.t,steps:op.steps}])); setSync('off'); toast('Bez signálu: uloží se, až budete online'); }
+async function sbWrite(op){ if(!navigator.onLine||obGet().length){ obPush(op); if(navigator.onLine) flushOutbox(); return; }
+  try{ const r=await sbRun(op); if(r&&r.error) throw r.error; setSync('on'); }
+  catch(e){ if(e&&/^\d{5}$/.test(String(e.code||''))){ setSync('on'); return; } obPush(op); } }
+let flushing=false;
+async function flushOutbox(){ if(!SB) return false; const ob=obGet(); if(!ob.length) return true; if(flushing) return false; flushing=true; let k=0;
+  for(;k<ob.length;k++){ try{ const r=await sbRun(ob[k]); if(r&&r.error&&!/^\d{5}$/.test(String(r.error.code||''))) throw r.error; }catch(e){ break; } }
+  obSet(obGet().slice(k)); flushing=false; const done=!obGet().length; if(done){ setSync('on'); toast('Uloženo, co jste přidaly offline'); } return done; }
+addEventListener('online',()=>{ flushOutbox().then(ok=>{ if(ok) schedulePull(); }); });
 function refreshShared(){ try{ refreshUserPins(); }catch(e){} refreshLikeBadges(); rerenderHearts(); renderPanel(cur); questProgress(); }
-async function pullAll(){ if(!SB) return;
+async function pullAll(){ if(!SB) return; if(!navigator.onLine){ setSync('off'); return; } if(obGet().length && !(await flushOutbox())){ setSync('off'); return; }
   try{ const [l,w,c]=await Promise.all([SB.from('likes').select('key,who'),SB.from('wish').select('id,who,t,c,done,created_at').order('created_at'),SB.from('checks').select('k')]);
     if(l.error||w.error||c.error) throw (l.error||w.error||c.error);
     const likes={}; l.data.forEach(r=>{ (likes[r.key]=likes[r.key]||{})[r.who]=true; }); STATE.likes=likes;
@@ -1500,10 +1513,10 @@ $('ch-t').addEventListener('input',e=>{ const t=e.target; t.style.height='auto';
 $('ch-form').addEventListener('submit',e=>{ e.preventDefault(); const me=getMe(); if(!me){ openMe(()=>{}); return; } const t=$('ch-t').value.trim(); if(!t) return;
   const m={id:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),who:me,t:t.slice(0,600),done:false,at:new Date().toISOString()};
   STATE.chat.push(m); $('ch-t').value=''; $('ch-t').style.height='auto'; renderChat();
-  if(SB){ sbWrite(SB.from('wish').insert({id:m.id,who:m.who,t:m.t,c:'claude',done:false})); cacheLocal(); } else saveSoon(); });
+  if(SB){ sbWrite(SBQ('wish').insert({id:m.id,who:m.who,t:m.t,c:'claude',done:false})); cacheLocal(); } else saveSoon(); });
 $('ch-body').addEventListener('click',e=>{ const d=e.target.closest('[data-chdone]'), x=e.target.closest('[data-chdel]');
-  if(d){ const m=STATE.chat.find(z=>z.id===d.dataset.chdone); if(!m) return; m.done=!m.done; renderChat(); if(SB){ sbWrite(SB.from('wish').update({done:m.done}).eq('id',m.id)); cacheLocal(); } else saveSoon(); }
-  if(x){ if(!x.dataset.armed){ x.dataset.armed='1'; x.textContent='Opravdu?'; return; } const id=x.dataset.chdel; STATE.chat=STATE.chat.filter(z=>z.id!==id); renderChat(); if(SB){ sbWrite(SB.from('wish').delete().eq('id',id)); cacheLocal(); } else saveSoon(); } });
+  if(d){ const m=STATE.chat.find(z=>z.id===d.dataset.chdone); if(!m) return; m.done=!m.done; renderChat(); if(SB){ sbWrite(SBQ('wish').update({done:m.done}).eq('id',m.id)); cacheLocal(); } else saveSoon(); }
+  if(x){ if(!x.dataset.armed){ x.dataset.armed='1'; x.textContent='Opravdu?'; return; } const id=x.dataset.chdel; STATE.chat=STATE.chat.filter(z=>z.id!==id); renderChat(); if(SB){ sbWrite(SBQ('wish').delete().eq('id',id)); cacheLocal(); } else saveSoon(); } });
 $('ch-copy').addEventListener('click',async()=>{ const open=STATE.chat.filter(m=>!m.done); if(!open.length){ toast('Žádné nevyřízené vzkazy'); return; }
   const txt='Vzkazy z appky Japan 👹 – prosím zapracuj do itineráře:\n'+open.map(m=>'- '+(AV[m.who]||'')+' '+m.t).join('\n');
   try{ await navigator.clipboard.writeText(txt); toast('Zkopírováno, vložte to Claudovi'); }catch(e){ prompt('Zkopírujte text:',txt); } });
@@ -1598,7 +1611,7 @@ function renderProfile(){
     WCATS.forEach(c=>{ const items=list.filter(x=>x.c===c[0]); if(!items.length) return; h+='<div class="nb-cat"><h5>'+c[0]+' '+c[1]+'</h5><ul class="wl">'+items.map(x=>'<li class="'+(x.done?'done':'')+'"><label class="check"><input type="checkbox" data-wdone="'+x.id+'"'+(x.done?' checked':'')+(edit?'':' disabled')+'><span>'+esc(x.t)+'</span></label>'+(edit?'<button type="button" class="del" data-wdel="'+x.id+'" aria-label="Smazat">×</button>':'')+'</li>').join('')+'</ul></div>'; });
   }
   $('prof-body').innerHTML=h;
-  const f=$('wish-form'); if(f) f.addEventListener('submit',e=>{ e.preventDefault(); const t=$('wish-t').value.trim(); if(!t) return; STATE.wish=STATE.wish||{b:[],p:[]}; const it={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:t.slice(0,80),c:$('wish-c').value,done:false}; (STATE.wish[me]=STATE.wish[me]||[]).push(it); renderProfile(); if(SB){ sbWrite(SB.from('wish').insert(Object.assign({who:me},it))); cacheLocal(); } else saveSoon(); });
+  const f=$('wish-form'); if(f) f.addEventListener('submit',e=>{ e.preventDefault(); const t=$('wish-t').value.trim(); if(!t) return; STATE.wish=STATE.wish||{b:[],p:[]}; const it={id:'w'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),t:t.slice(0,80),c:$('wish-c').value,done:false}; (STATE.wish[me]=STATE.wish[me]||[]).push(it); renderProfile(); if(SB){ sbWrite(SBQ('wish').insert(Object.assign({who:me},it))); cacheLocal(); } else saveSoon(); });
 }
 $('prof-dlg').addEventListener('click',e=>{
   const t=e.target.closest('[data-view],[data-tab],#who-sw,[data-open],[data-wdel],[data-plan],[data-pday]'); if(!t) return;
@@ -1608,9 +1621,9 @@ $('prof-dlg').addEventListener('click',e=>{
   if(t.dataset.tab){ profTab=t.dataset.tab; try{ sessionStorage.setItem('japan-sheet',profTab); }catch(e){} renderProfile(); return; }
   if(t.id==='who-sw'){ openMe(()=>{ profView=getMe(); renderProfile(); }); return; }
   if(t.dataset.open){ const r=resolveKey(t.dataset.open); closeProfile(); if(!r) return; if(r.day!=null) go(r.day,{dur:900}); if(r.distId!=null) setTimeout(()=>flyToSpot(r.city,r.distId+':'+r.k),950); return; }
-  if(t.dataset.wdel){ const me=getMe(); if(t.dataset.armed){ const wid=t.dataset.wdel; STATE.wish[me]=(STATE.wish[me]||[]).filter(x=>x.id!==wid); renderProfile(); if(SB){ sbWrite(SB.from('wish').delete().eq('id',wid)); cacheLocal(); } else saveSoon(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); } }
+  if(t.dataset.wdel){ const me=getMe(); if(t.dataset.armed){ const wid=t.dataset.wdel; STATE.wish[me]=(STATE.wish[me]||[]).filter(x=>x.id!==wid); renderProfile(); if(SB){ sbWrite(SBQ('wish').delete().eq('id',wid)); cacheLocal(); } else saveSoon(); } else { t.dataset.armed='1'; t.textContent='Smazat?'; t.classList.add('armed'); } }
 });
-$('prof-dlg').addEventListener('change',e=>{ const id=e.target.dataset&&e.target.dataset.wdone; if(!id) return; const me=getMe(); const it=(STATE.wish[me]||[]).find(x=>x.id===id); if(it){ it.done=e.target.checked; e.target.closest('li').classList.toggle('done',it.done); if(SB){ sbWrite(SB.from('wish').update({done:it.done}).eq('id',it.id)); cacheLocal(); } else saveSoon(); } });
+$('prof-dlg').addEventListener('change',e=>{ const id=e.target.dataset&&e.target.dataset.wdone; if(!id) return; const me=getMe(); const it=(STATE.wish[me]||[]).find(x=>x.id===id); if(it){ it.done=e.target.checked; e.target.closest('li').classList.toggle('done',it.done); if(SB){ sbWrite(SBQ('wish').update({done:it.done}).eq('id',it.id)); cacheLocal(); } else saveSoon(); } });
 $('prof-x').addEventListener('click',closeProfile);
 $('prof-dlg').addEventListener('close',()=>{ try{ sessionStorage.removeItem('japan-sheet'); }catch(e){} });
 // profile
@@ -1635,7 +1648,7 @@ try{ const sh=sessionStorage.getItem('japan-sheet'); if(sh&&getMe()) setTimeout(
 </script>
 
 <script>
-const APP_VER='18';
+const APP_VER='19';
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{})); }
 /* kontrola nové verze: iPhone appku z plochy jen „probudí“, nenačte znovu */
 let hiddenAt=0, verBusy=false;

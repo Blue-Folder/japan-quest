@@ -26,7 +26,7 @@ Klepnutí na město nebo vesnici na mapě (`zoomPlace()`) otevře její den a p�
 - Profil → záložka „Plán“ (`planHTML()`): místa z TL po městech a dnech.
 
 ## Struktura
-- `index.html` – celá appka v jednom souboru (Three.js r128 z cdnjs, OrbitControls z jsDelivr).
+- `index.html` – celá appka v jednom souboru (Three.js r128 a OrbitControls ve vendor/).
   - `DAYS` – 13 dní (datum, region, přesuny, tipy, co ověřit)
   - `TL` + `TLREF` – časová timeline každého dne, odkazy na místa (`district:index`) nebo dotazy (`q:…`)
   - `CITIES_D` – čtvrti Tokia, Kjóta a Ósaky a jejich místa `[emoji, název, poznámka, [lon, lat]]`
@@ -34,7 +34,8 @@ Klepnutí na město nebo vesnici na mapě (`zoomPlace()`) otevře její den a p�
   - `GEO` – pobřeží Japonska (dataofjapan/land) a tokijské linky (mini-tokyo-3d), zjednodušené
   - `STATE` – uživatelská data: vlastní místa, fotky (data URI), checklist, srdíčka (`likes`), wishlist (`wish`)
 - `manifest.webmanifest`, `icons/` – instalace na plochu
-- `sw.js` – service worker
+- `sw.js` – service worker: offline jádro (CORE se ukládá při instalaci), síť s časovým limitem, Supabase neobsluhuje
+- `vendor/` – Supabase, Three.js r128 a OrbitControls lokálně (kvůli offline)
 
 ## Profily
 Dva profily bez jmen: `b` = 🧸 modré srdíčko, `p` = 🧜‍♀️ fialové srdíčko. Obě srdíčka = vínové (#722f37).
@@ -45,6 +46,7 @@ Aktuální profil je v `localStorage['japan-me']`.
   (URL + anon key), knihovna `vendor/supabase-2.117.2.js`, schéma `supabase-setup.sql`.
   Sync: `initSync()` → `pullAll()` + realtime odběr; zápisy přes `sbWrite()`; lokální cache v `localStorage['japan-state']`.
   Tečka na ikoně profilu: zelená = spojeno, oranžová = chyba/offline.
+  Offline zápisy jdou do fronty `localStorage['japan-outbox']` (`SBQ()` zaznamená dotaz, `flushOutbox()` ho po připojení odešle, `pullAll()` čeká, než je fronta prázdná).
 - Bez vyplněného `config.js` běží vše jen lokálně v telefonu.
 - Vlastní místa (`places`, sloupec `who` = kdo přidal) a vyřazené body itineráře (`hidden`, klíče `tl:den-index`) se sdílí taky (krok 2 v `supabase-setup.sql`). Když tabulky chybí, `SB_PLACES=false` a místa zůstanou lokální.
 - Fotky jsou zatím JEN lokální (localStorage).
